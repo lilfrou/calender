@@ -13,7 +13,7 @@
         <ul class="nav-main">
             <li class="nav-main-item">
                 <a class="nav-main-link{{request()->is('dashboard') ? ' active' : ''}}" href="{{route('dashboard')}}">
-                    <i class="nav-main-link-icon far fa fa-clipboard"></i>
+                    <i class="nav-main-link-icon far fad fa-calendar-alt"></i>
                     <span class="nav-main-link-name">dashboard</span>
                 </a>
             </li>
