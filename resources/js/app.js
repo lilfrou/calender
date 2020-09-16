@@ -5,7 +5,7 @@
  */
 
 require('./bootstrap');
-
+import store from './store';
 window.Vue = require('vue');
 
 /**
@@ -29,4 +29,5 @@ Vue.component('agenda-component', require('./components/AgendaComponent.vue').de
 
 const app = new Vue({
     el: '#app',
+    store
 });

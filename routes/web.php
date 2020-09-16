@@ -22,3 +22,6 @@ Route::get('/guest', [App\Http\Controllers\HomeController::class, 'index'])->nam
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 Auth::routes();
 
+
+
+
