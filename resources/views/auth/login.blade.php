@@ -1,73 +1,85 @@
-@extends('layouts.app')
+@extends('layouts.simple')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+<div id="page-container">
 
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+    <!-- Main Container -->
+    <main id="main-container">
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+        <!-- Page Content -->
+        <div class="bg-image" style="background-image: url('assets/media/photos/photo6@2x.jpg');">
+            <div class="hero-static bg-white-95">
+                <div class="content">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8 col-lg-6 col-xl-4">
+                            <!-- Sign In Block -->
+                            <div class="block block-themed block-fx-shadow mb-0">
+                                <div class="block-header">
+                                    <h3 class="block-title">{{ __('auth.Sign In')}}</h3>
+                                    <div class="block-options">
+                                        {{-- @if (Route::has('password.request'))
+                                            <a class="btn-block-option font-size-sm" href="{{ route('password.request') }}">
+                                                {{ __('auth.Forgot Your Password?') }}
+                                            </a>
+                                        @endif --}}
+                                        <a class="btn-block-option" href="{{ route('register') }}" data-toggle="tooltip" data-placement="left" title="{{ __('auth.New Account')}}">
+                                            <i class="fa fa-user-plus"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="block-content">
+                                    <div class="p-sm-3 px-lg-4 py-lg-5">
+                                        <h1 class="mb-2">{{ __('auth.Calender')}}</h1>
+                                        <p>{{ __('auth.Welcome, please login.')}}</p>
+                                        <form class="js-validation-signin" action="{{ route('login') }}" method="POST">
+                                            @csrf
+                                            <div class="py-3">
+                                                <div class="form-group">
+                                                    <input id="email" type="email" class="form-control form-control-alt form-control-lg{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="{{ __('auth.Email')}}" required autofocus>
+                                                    @if ($errors->has('email'))
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ __('auth.'.$errors->first('email')) }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                                <div class="form-group">
+                                                    <input id="password" type="password" class="form-control form-control-alt form-control-lg{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" placeholder="{{ __('auth.Password')}}" required>
+                                                    @if ($errors->has('password'))
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ __('auth.'.$errors->first('password')) }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-6 col-xl-6">
+                                                    <button type="submit" class="btn btn-block btn-primary">
+                                                        <i class="fa fa-fw fa-sign-in-alt mr-1"></i> {{ __('auth.Sign In')}}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <!-- END Sign In Form -->
 
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <!-- END Sign In Block -->
 
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
                         </div>
-                    </form>
+                    </div>
+                </div>
+                <div class="content content-full font-size-sm text-muted text-center">
+                    <strong>{{ __('auth.By Calender')}}</strong>
                 </div>
             </div>
         </div>
-    </div>
+        <!-- END Page Content -->
+
+    </main>
+    <!-- END Main Container -->
 </div>
+<!-- END Page Container -->
+
 @endsection
