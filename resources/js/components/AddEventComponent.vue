@@ -76,7 +76,15 @@ export default {
           location: this.location,
           attendees: this.attendees,
         }) .then((response) => (this.$emit("evnetCreated",response)),$("#createEvent").modal("hide"))
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error))
+         .finally(
+            () => (this.title = ""),
+            (this.description = ""),
+            (this.location = ""),
+            (this.attendees = ""),
+             (document.getElementById("start").value = ""),
+              ( document.getElementById("end").value= "")
+          );
       }
   }
 };

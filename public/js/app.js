@@ -19470,7 +19470,9 @@ __webpack_require__.r(__webpack_exports__);
         return _this.$emit("evnetCreated", response);
       }, $("#createEvent").modal("hide"))["catch"](function (error) {
         return console.log(error);
-      });
+      })["finally"](function () {
+        return _this.title = "";
+      }, this.description = "", this.location = "", this.attendees = "", document.getElementById("start").value = "", document.getElementById("end").value = "");
     }
   }
 });
