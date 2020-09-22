@@ -1,6 +1,33 @@
 <template>
   <div>
-    <Fullcalendar :options="calendarOptions" />
+    <div class="bg-body-light">
+      <div class="content content-full">
+        <div
+          class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center"
+        >
+          <h1 class="flex-sm-fill h3 my-2">
+            Calender
+            <small
+              class="d-block d-sm-inline-block mt-2 mt-sm-0 font-size-base font-w400 text-muted"
+            >#{{this.user.auth}}</small>
+
+            <div v-if="this.user.auth=='admin'" class="float-right">  <button
+      id="filter-button"
+      type="button"
+      class="btn btn-outline-primary"
+      data-toggle="modal"
+      data-target="#filterEvent"
+    >Filter</button></div>
+        <filtercomponent  @eventFiltred="refresh"></filtercomponent>
+
+
+          </h1>
+        </div>
+      </div>
+    </div>
+    <div class="container" style="margin-top: 20px;">
+      <Fullcalendar :options="calendarOptions" />
+    </div>
     <button
       id="add-button"
       type="button"
@@ -9,7 +36,8 @@
       data-target="#createEvent"
       style="display: none;"
     >Add</button>
-    <addEvent-component @evnetCreated="this.getEvents"></addEvent-component>
+    <addEvent-component @evnetCreated="getEvents" :user_id="this.user.id"></addEvent-component>
+
   </div>
 </template>
 
@@ -20,9 +48,10 @@ import TimeGridPlugin from "@fullcalendar/timegrid";
 import InteractionPlugin from "@fullcalendar/interaction";
 import ListPlugin from "@fullcalendar/list";
 import { mapGetters } from "vuex";
+import filtercomponent from "./FilterEventComponent.vue";
 
 export default {
-  components: { Fullcalendar },
+  components: { Fullcalendar, filtercomponent },
   //   computed: {
   //     ...mapGetters(["EVENTS"]),
   //   },
@@ -41,30 +70,34 @@ export default {
         showNonCurrentDates: false,
         fixedWeekCount: false,
         selectable: true,
-        events: "",
+        events: {},
         select: function (selectionInfo) {
           document.getElementById("add-button").click();
-          document.getElementById("start").value=selectionInfo.startStr;
-           document.getElementById("end").value=selectionInfo.endStr;
+          document.getElementById("start").value = selectionInfo.startStr;
+          document.getElementById("end").value = selectionInfo.endStr;
         },
       },
-
     };
   },
-  //   mounted() {
-  //     console.log("Component mounted.");
-  //   },
+  mounted() {
+    console.log("Component mounted.");
+    console.log(this.user);
+  },
   created() {
     this.getEvents();
   },
+  props: ["user"],
+
   methods: {
     getEvents() {
       axios
-        .get("api/event/index")
+        .get(`api/event/index/${this.user.id}`)
         .then((response) => (this.calendarOptions.events = response.data))
         .catch((error) => console.log(error));
     },
-
+    refresh(filtred){
+        this.calendarOptions.events = filtred.data;
+    }
   },
 };
 </script>

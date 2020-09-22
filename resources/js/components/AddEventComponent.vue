@@ -40,7 +40,7 @@
 
                     </div>
                     <div class="block-content block-content-full text-right border-top">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">close</button>
+                        <button type="button" class="btn btn-secondary" @click="reset" data-dismiss="modal">close</button>
                         <button type="button" class="btn btn-primary" @click="create">create</button>
                     </div>
                 </form>
@@ -64,11 +64,24 @@ export default {
   },
   mounted() {
     console.log("Component mounted.");
+    console.log(this.user_id);
+
   },
+ props: ["user_id"],
   methods:{
+      reset(){
+          this.title="";
+          this.description="";
+          this.location="";
+          this.attendees="";
+          document.getElementById("start").value = "";
+          document.getElementById("end").value= "";
+
+      },
       create(){
          axios
         .post("api/event/create", {
+          user_id:this.user_id,
           start:  document.getElementById("start").value,
           end:  document.getElementById("end").value,
           title: this.title,
@@ -78,14 +91,10 @@ export default {
         }) .then((response) => (this.$emit("evnetCreated",response)),$("#createEvent").modal("hide"))
         .catch((error) => console.log(error))
          .finally(
-            () => (this.title = ""),
-            (this.description = ""),
-            (this.location = ""),
-            (this.attendees = ""),
-             (document.getElementById("start").value = ""),
-              ( document.getElementById("end").value= "")
+            () => this.reset()
           );
       }
+
   }
 };
 </script>

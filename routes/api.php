@@ -19,8 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::group(['prefix' => 'event', 'middleware' => ['api']], function () {
-    Route::get('index',  [App\Http\Controllers\EventController::class, 'index'])->name('event.index');
+Route::group(['prefix' => 'event'], function () {
+    Route::get('index/{user_id}',  [App\Http\Controllers\EventController::class, 'index'])->name('event.index');
+    Route::get('getUsers',  [App\Http\Controllers\EventController::class, 'getUsers'])->name('event.getUsers');
     Route::post('create',  [App\Http\Controllers\EventController::class, 'create'])->name('event.create');
 
 });
