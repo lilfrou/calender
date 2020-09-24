@@ -20,9 +20,9 @@
                             <label>USER_LIST</label>
                             <select name="user_id" id="user_id" class="form-control" required>
                                 <option value="" selected disabled>please_select</option>
+                                <option :value="0">all</option>
                                 <option v-for="user in users" :key="user.id" :value="user.id">
-                                    <p v-if="user.auth=='admin'">all</p>
-                                    <p v-else>{{user.name}}</p>
+                                    <p>{{user.name}}</p>
                                     </option>
                             </select>
                         </div>

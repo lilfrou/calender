@@ -20,6 +20,7 @@
                             <input type="hidden" id="start" name="start" class="form-control"  required>
 
                           <input type="hidden" name="end"  id="end" class="form-control"  required>
+                         <input type="hidden" id="type" name="type" class="form-control"  required>
 
                          <div class="form-group">
                             <label>title</label>
@@ -32,6 +33,14 @@
                          <div class="form-group">
                             <label>location</label>
                             <input type="text" name="location"  class="form-control" v-model="location" required>
+                        </div>
+                         <div class="form-group">
+                            <label>start</label>
+                            <input type="time" name="start_time" id="start_time"  v-model="start_time" class="form-control"  required>
+                        </div>
+                         <div class="form-group">
+                            <label>end</label>
+                            <input type="time" name="end_time" id="end_time" v-model="end_time" class="form-control"  required>
                         </div>
                          <div class="form-group">
                             <label>attendees</label>
@@ -60,6 +69,11 @@ export default {
       description: "",
       location: "",
       attendees: "",
+      start_time:"",
+      end_time:"",
+      start:"",
+      end:"",
+      type:"",
     };
   },
   mounted() {
@@ -76,14 +90,28 @@ export default {
           this.attendees="";
           document.getElementById("start").value = "";
           document.getElementById("end").value= "";
+          this.start_time="";
+          this.end_time="";
+          this.start="";
+          this.end="";
+          this.type="";
 
       },
       create(){
+
+
+           if(document.getElementById("type").value=='dayGridMonth'){
+               this.start=document.getElementById("start").value+'T'+this.start_time;
+               this.end=  document.getElementById("start").value+'T'+this.end_time;
+           }else{
+               this.start=document.getElementById("start").value+'T'+this.start_time;
+               this.end=  document.getElementById("end").value+'T'+this.end_time;
+           }
          axios
         .post("api/event/create", {
           user_id:this.user_id,
-          start:  document.getElementById("start").value,
-          end:  document.getElementById("end").value,
+          start:  this.start,
+          end: this.end,
           title: this.title,
           description: this.description,
           location: this.location,

@@ -103,8 +103,8 @@
     <script src="{{ asset('js/app.js') }}">
 
     </script>
-    {{-- <script src="{{ asset('js/oneui.app.js') }}"></script>
-    --}}
+    {{-- <script src="{{ asset('js/oneui.app.js') }}"></script> --}}
+
 
 
     <!-- Laravel Scaffolding JS -->

@@ -18,9 +18,19 @@ class EventController extends Controller
     }
     public function index($user_id)
     {
-        if ($this->user->Auth($user_id) == '["admin"]') {
+        if ($user_id==0 ) {
             $events = $this->event->all();
-        } else {
+
+        }else{
+            $events = $this->event->where('user_id', $user_id)->get();
+        }
+        return $events;
+    }
+    public function login($user_id)
+    {
+        if($this->user->Auth($user_id) == '["admin"]'){
+            $events = $this->event->all();
+        }else{
             $events = $this->event->where('user_id', $user_id)->get();
         }
         return $events;
@@ -41,5 +51,30 @@ class EventController extends Controller
             'end' => request('end')
         ]);
         return 200;
+    }
+    public function getEvent($event_id){
+
+        $event = $this->event->where('id', $event_id)->first();
+        return $event;
+
+    }
+    public function update()
+    {
+        $this->event->where('id',request('id'))->update([
+            'title' => request('title'),
+            'user_id' => request('user_id'),
+            'description' => request('description'),
+            'location' => request('location'),
+            'attendees' => request('attendees'),
+            'start' => request('start'),
+            'end' => request('end')
+        ]);
+        return 200;
+    }
+    public function destroy(){
+
+        $event = $this->event->where('id', request('event_id'))->delete();
+        return 200;
+
     }
 }

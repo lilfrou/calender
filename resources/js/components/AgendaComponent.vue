@@ -19,7 +19,7 @@
       data-target="#filterEvent"
     >Filter</button></div>
         <filtercomponent  @eventFiltred="refresh"></filtercomponent>
-
+        <detailcomponent @eventDeleted="getEvents" @eventUpdate="getEvents" />
 
           </h1>
         </div>
@@ -36,7 +36,15 @@
       data-target="#createEvent"
       style="display: none;"
     >Add</button>
-    <addEvent-component @evnetCreated="getEvents" :user_id="this.user.id"></addEvent-component>
+     <button
+      id="detail-button"
+      type="button"
+      class="btn btn-primary"
+      data-toggle="modal"
+      data-target="#detailEvent"
+      style="display: none;"
+    >detail</button>
+    <addEvent-component @evnetCreated="getEvents"  :user_id="this.user.id"></addEvent-component>
 
   </div>
 </template>
@@ -49,20 +57,23 @@ import InteractionPlugin from "@fullcalendar/interaction";
 import ListPlugin from "@fullcalendar/list";
 import { mapGetters } from "vuex";
 import filtercomponent from "./FilterEventComponent.vue";
+import detailcomponent from "./DetailEventComponent";
+
 
 export default {
-  components: { Fullcalendar, filtercomponent },
+  components: { Fullcalendar, filtercomponent,detailcomponent},
   //   computed: {
   //     ...mapGetters(["EVENTS"]),
   //   },
   data() {
     return {
+        info:'',
       calendarOptions: {
         plugins: [DayGridPlugin, TimeGridPlugin, InteractionPlugin, ListPlugin],
         initialView: "dayGridMonth",
         locale: "en",
         headerToolbar: {
-          left: "dayGridMonth timeGridWeek timeGridDay listWeek",
+          left: "dayGridMonth",
           center: "title",
           right: "prev today next",
         },
@@ -70,12 +81,25 @@ export default {
         showNonCurrentDates: false,
         fixedWeekCount: false,
         selectable: true,
-        events: {},
+        allDaySlot:false,
+        dayMaxEventRows:4,
+        displayEventTime:true,
+        // displayEventEnd:true,
+
+        // editable:true,
+                events: {},
         select: function (selectionInfo) {
           document.getElementById("add-button").click();
           document.getElementById("start").value = selectionInfo.startStr;
           document.getElementById("end").value = selectionInfo.endStr;
+          document.getElementById("type").value =selectionInfo.view.type;
         },
+        eventClick: function( eventClickInfo ) {
+            console.log(eventClickInfo.view.type);
+             document.getElementById("detail-button").click();
+             document.getElementById("event_id").value = eventClickInfo.event._def.publicId;
+             document.getElementById("type_event").value =eventClickInfo.view.type;
+        }
       },
     };
   },
@@ -91,13 +115,13 @@ export default {
   methods: {
     getEvents() {
       axios
-        .get(`api/event/index/${this.user.id}`)
+        .get(`api/event/login/${this.user.id}`)
         .then((response) => (this.calendarOptions.events = response.data))
         .catch((error) => console.log(error));
     },
     refresh(filtred){
         this.calendarOptions.events = filtred.data;
-    }
+    },
   },
 };
 </script>
