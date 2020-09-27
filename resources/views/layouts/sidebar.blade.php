@@ -1,4 +1,6 @@
 
+@inject('service', 'App\Services\Service')
+
 <nav id="sidebar" aria-label="Main Navigation">
 
     <div class="content-header bg-white-5">
@@ -7,7 +9,11 @@
                 <span class="font-w700 font-size-h5">{{trans('auth.Calender')}}</span>
             </span>
         </a>
+        <a class="d-lg-none text-dual ml-3" data-toggle="layout" data-action="sidebar_close" href="javascript:void(0)">
+            <i class="fa fa-times"></i>
+        </a>
     </div>
+
 
     <div class="content-side content-side-full">
         <ul class="nav-main">
@@ -45,7 +51,7 @@
                     <i class="nav-main-link-icon si si-user"></i>
                     <span class="nav-main-link-name">operators</span>
                     <span class="badge badge-pill badge-secondary">
-                        {{-- {{$service->getAuthUsers('guest')->count()}} --}}
+                        {{$service->countUsers('operator')->count()}}
                     </span>
                 </a>
             </li>
@@ -55,7 +61,7 @@
                     <i class="nav-main-link-icon si si-user"></i>
                     <span class="nav-main-link-name">guests</span>
                     <span class="badge badge-pill badge-secondary">
-                        {{-- {{$service->getAuthUsers('guest')->count()}} --}}
+                        {{$service->countUsers('guest')->count()}}
                     </span>
                 </a>
             </li>

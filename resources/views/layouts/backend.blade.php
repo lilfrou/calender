@@ -70,6 +70,7 @@
                     data-action="side_overlay_close">
                     <i class="fa fa-fw fa-times text-danger"></i>
                 </a>
+
                 <!-- END Close Side Overlay -->
             </div>
             <!-- END Side Header -->

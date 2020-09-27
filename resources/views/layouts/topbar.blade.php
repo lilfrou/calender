@@ -1,14 +1,18 @@
 <header id="page-header">
     <!-- Header Content -->
     <div class="content-header">
+        <button type="button" class="btn btn-sm btn-dual mr-2 d-lg-none" data-toggle="layout" data-action="sidebar_toggle">
+            <i class="fa fa-fw fa-bars"></i>
+        </button>
+
         <!-- Left Section -->
         <div class="d-flex align-items-center">
             <!-- Open Search Section (visible on smaller screens) -->
             <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-            <button type="button" class="btn btn-sm btn-dual d-sm-none" data-toggle="layout"
+             {{-- <button type="button" class="btn btn-sm btn-dual d-sm-none" data-toggle="layout"
                 data-action="header_search_on">
                 <i class="si si-magnifier"></i>
-            </button>
+            </button> --}}
             <!-- END Open Search Section -->
 
             <!-- Search Form (visible on larger screens) -->
@@ -29,14 +33,15 @@
         </div>
         <!-- END Left Section -->
 
+
         <!-- Right Section -->
         <div class="d-flex align-items-center">
             <!-- User Dropdown -->
             <div class="dropdown d-inline-block ml-2">
                 <button type="button" class="btn btn-sm btn-dual" id="page-header-user-dropdown" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                    <span class="d-none d-sm-inline-block ml-1"></span>
-                    <span class="d-none d-sm-inline-block ml-1">{{Auth::user()->name}}</span>
+                    <span class="btn btn-sm btn-dual">{{Auth::user()->name}}</span>
+                    {{-- <span class="d-none d-sm-inline-block ml-1">{{Auth::user()->name}}</span> --}}
                     <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right p-0 border-0 font-size-sm"

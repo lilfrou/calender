@@ -16,12 +16,6 @@
                 <form>
                     <div class="block-content font-size-sm">
 
-
-                            <input type="hidden" id="start" name="start" class="form-control"  required>
-
-                          <input type="hidden" name="end"  id="end" class="form-control"  required>
-                         <input type="hidden" id="type" name="type" class="form-control"  required>
-
                          <div class="form-group">
                             <label>title</label>
                             <input type="text" name="title"  class="form-control" v-model="title" required>
@@ -76,20 +70,13 @@ export default {
       type:"",
     };
   },
-  mounted() {
-    console.log("Component mounted.");
-    console.log(this.user_id);
-
-  },
- props: ["user_id"],
+ props: ["user_id" , "infoSelected"],
   methods:{
       reset(){
           this.title="";
           this.description="";
           this.location="";
           this.attendees="";
-          document.getElementById("start").value = "";
-          document.getElementById("end").value= "";
           this.start_time="";
           this.end_time="";
           this.start="";
@@ -100,12 +87,11 @@ export default {
       create(){
 
 
-           if(document.getElementById("type").value=='dayGridMonth'){
-               this.start=document.getElementById("start").value+'T'+this.start_time;
-               this.end=  document.getElementById("start").value+'T'+this.end_time;
+           if(this.type=='dayGridMonth'){
+               this.start+='T'+this.start_time;
+               this.end+='T'+this.end_time;
            }else{
-               this.start=document.getElementById("start").value+'T'+this.start_time;
-               this.end=  document.getElementById("end").value+'T'+this.end_time;
+               return;
            }
          axios
         .post("api/event/create", {
@@ -122,6 +108,14 @@ export default {
             () => this.reset()
           );
       }
+  },
+       watch:{
+      infoSelected:function(newValue) {
+                  this.start=newValue.startStr;
+                  this.end=newValue.startStr;
+                  this.type=newValue.view.type;
+      }
+
 
   }
 };

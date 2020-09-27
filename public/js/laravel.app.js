@@ -19446,12 +19446,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -19466,19 +19460,13 @@ __webpack_require__.r(__webpack_exports__);
       type: ""
     };
   },
-  mounted: function mounted() {
-    console.log("Component mounted.");
-    console.log(this.user_id);
-  },
-  props: ["user_id"],
+  props: ["user_id", "infoSelected"],
   methods: {
     reset: function reset() {
       this.title = "";
       this.description = "";
       this.location = "";
       this.attendees = "";
-      document.getElementById("start").value = "";
-      document.getElementById("end").value = "";
       this.start_time = "";
       this.end_time = "";
       this.start = "";
@@ -19488,12 +19476,11 @@ __webpack_require__.r(__webpack_exports__);
     create: function create() {
       var _this = this;
 
-      if (document.getElementById("type").value == 'dayGridMonth') {
-        this.start = document.getElementById("start").value + 'T' + this.start_time;
-        this.end = document.getElementById("start").value + 'T' + this.end_time;
+      if (this.type == 'dayGridMonth') {
+        this.start += 'T' + this.start_time;
+        this.end += 'T' + this.end_time;
       } else {
-        this.start = document.getElementById("start").value + 'T' + this.start_time;
-        this.end = document.getElementById("end").value + 'T' + this.end_time;
+        return;
       }
 
       axios.post("api/event/create", {
@@ -19511,6 +19498,13 @@ __webpack_require__.r(__webpack_exports__);
       })["finally"](function () {
         return _this.reset();
       });
+    }
+  },
+  watch: {
+    infoSelected: function infoSelected(newValue) {
+      this.start = newValue.startStr;
+      this.end = newValue.startStr;
+      this.type = newValue.view.type;
     }
   }
 });
@@ -19585,6 +19579,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -19603,16 +19613,23 @@ __webpack_require__.r(__webpack_exports__);
   //     ...mapGetters(["EVENTS"]),
   //   },
   data: function data() {
+    var _this = this;
+
     return {
-      info: '',
+      infoSelected: {},
+      EventId: 0,
       calendarOptions: {
         plugins: [_fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_1__["default"], _fullcalendar_timegrid__WEBPACK_IMPORTED_MODULE_2__["default"], _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_3__["default"], _fullcalendar_list__WEBPACK_IMPORTED_MODULE_4__["default"]],
         initialView: "dayGridMonth",
         locale: "en",
         headerToolbar: {
-          left: "dayGridMonth",
-          center: "title",
+          left: "title",
+          center: "",
           right: "prev today next"
+        },
+        titleFormat: {
+          year: 'numeric',
+          month: 'short'
         },
         // weekends:false,
         showNonCurrentDates: false,
@@ -19621,27 +19638,22 @@ __webpack_require__.r(__webpack_exports__);
         allDaySlot: false,
         dayMaxEventRows: 4,
         displayEventTime: true,
+        longPressDelay: 100,
+        handleWindowResize: true,
+        windowResizeDelay: 0,
         // displayEventEnd:true,
         // editable:true,
         events: {},
         select: function select(selectionInfo) {
+          _this.infoSelected = selectionInfo;
           document.getElementById("add-button").click();
-          document.getElementById("start").value = selectionInfo.startStr;
-          document.getElementById("end").value = selectionInfo.endStr;
-          document.getElementById("type").value = selectionInfo.view.type;
         },
         eventClick: function eventClick(eventClickInfo) {
-          console.log(eventClickInfo.view.type);
+          _this.EventId = eventClickInfo.event.id;
           document.getElementById("detail-button").click();
-          document.getElementById("event_id").value = eventClickInfo.event._def.publicId;
-          document.getElementById("type_event").value = eventClickInfo.view.type;
         }
       }
     };
-  },
-  mounted: function mounted() {
-    console.log("Component mounted.");
-    console.log(this.user);
   },
   created: function created() {
     this.getEvents();
@@ -19649,10 +19661,11 @@ __webpack_require__.r(__webpack_exports__);
   props: ["user"],
   methods: {
     getEvents: function getEvents() {
-      var _this = this;
+      var _this2 = this;
 
+      this.EventId = 0;
       axios.get("api/event/login/".concat(this.user.id)).then(function (response) {
-        return _this.calendarOptions.events = response.data;
+        return _this2.calendarOptions.events = response.data;
       })["catch"](function (error) {
         return console.log(error);
       });
@@ -19731,72 +19744,46 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-$('#detailEvent').on('show.bs.modal', function (e) {
-  alert('miaws');
-});
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       event: {},
-      start_time_event: '',
-      end_time_event: ''
+      start: '',
+      end: ''
     };
   },
-  mounted: function mounted() {
-    console.log("Component mounted.");
-    console.log(this.user_id);
-  },
-  props: ["user_id"],
+  props: ["user_id", "EventId"],
   methods: {
     destroy: function destroy() {
       var _this = this;
 
-      var event_id = document.getElementById("event_id").value;
       axios.post('api/event/destroy', {
-        event_id: event_id
+        event_id: this.EventId
       }).then(function (response) {
         return _this.$emit("eventDeleted", response);
       }, $("#detailEvent").modal("hide"))["catch"](function (error) {
         return console.log(error);
       });
     },
-    //   getDetail(){
-    //     alert("miaw");
-    //   },
     getEvent: function getEvent() {
       var _this2 = this;
 
-      var event_id = document.getElementById("event_id").value;
-      axios.get("api/event/getEvent/".concat(event_id)).then(function (response) {
+      axios.get("api/event/getEvent/".concat(this.EventId)).then(function (response) {
         return _this2.event = response.data;
       })["catch"](function (error) {
         return console.log(error);
-      }); // var ti=document.getElementById('start_event').value;
-      // alert(ti);
+      });
     },
     update: function update() {
       var _this3 = this;
 
-      if (document.getElementById("type_event").value == 'dayGridMonth') {
-        this.start_time_event = document.getElementById("start_event").value.split(' ', 1)[0] + 'T' + this.start_time_event;
-        this.end_time_event = document.getElementById("end_event").value.split(' ', 1)[0] + 'T' + this.end_time_event;
-      } else {
-        this.start_time_event = document.getElementById("start_event").value + 'T' + this.start_time_event;
-        this.end_time_event = document.getElementById("end_event").value + 'T' + this.end_time_event;
-      }
-
+      this.start = this.event.start.split(' ', 1)[0] + 'T' + this.start;
+      this.end = this.event.end.split(' ', 1)[0] + 'T' + this.end;
       axios.post("api/event/update", {
-        id: this.event.id,
+        id: this.EventId,
         user_id: this.event.user_id,
-        start: this.start_time_event,
-        end: this.end_time_event,
+        start: this.start,
+        end: this.end,
         title: this.event.title,
         description: this.event.description,
         location: this.event.location,
@@ -19809,11 +19796,14 @@ $('#detailEvent').on('show.bs.modal', function (e) {
     }
   },
   watch: {
+    EventId: function EventId(newValue) {
+      if (newValue != 0) {
+        this.getEvent();
+      }
+    },
     event: function event(newValue) {
-      console.log(newValue); //   if(!this.start_time_event && !this.end_time_event){
-
-      this.start_time_event = newValue.start.split(' ')[1];
-      this.end_time_event = newValue.end.split(' ')[1]; //   }
+      this.start = newValue.start.split(' ')[1];
+      this.end = newValue.end.split(' ')[1];
     }
   }
 });
@@ -56050,36 +56040,6 @@ var render = function() {
                 _vm._v(" "),
                 _c("form", [
                   _c("div", { staticClass: "block-content font-size-sm" }, [
-                    _c("input", {
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "hidden",
-                        id: "start",
-                        name: "start",
-                        required: ""
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("input", {
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "hidden",
-                        name: "end",
-                        id: "end",
-                        required: ""
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("input", {
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "hidden",
-                        id: "type",
-                        name: "type",
-                        required: ""
-                      }
-                    }),
-                    _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
                       _c("label", [_vm._v("title")]),
                       _vm._v(" "),
@@ -56323,10 +56283,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AgendaComponent.vue?vue&type=template&id=91092b94&":
-/*!******************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AgendaComponent.vue?vue&type=template&id=91092b94& ***!
-  \******************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AgendaComponent.vue?vue&type=template&id=91092b94&ref=miaw&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AgendaComponent.vue?vue&type=template&id=91092b94&ref=miaw& ***!
+  \***************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -56347,7 +56307,8 @@ var render = function() {
             "div",
             {
               staticClass:
-                "d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center"
+                "d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center",
+              staticStyle: { "margin-top": "20px" }
             },
             [
               _c(
@@ -56377,7 +56338,7 @@ var render = function() {
                               "data-target": "#filterEvent"
                             }
                           },
-                          [_vm._v("Filter")]
+                          [_vm._v("\n              Filter\n            ")]
                         )
                       ])
                     : _vm._e(),
@@ -56385,6 +56346,7 @@ var render = function() {
                   _c("filtercomponent", { on: { eventFiltred: _vm.refresh } }),
                   _vm._v(" "),
                   _c("detailcomponent", {
+                    attrs: { EventId: _vm.EventId },
                     on: {
                       eventDeleted: _vm.getEvents,
                       eventUpdate: _vm.getEvents
@@ -56399,13 +56361,6 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c(
-        "div",
-        { staticClass: "container", staticStyle: { "margin-top": "20px" } },
-        [_c("Fullcalendar", { attrs: { options: _vm.calendarOptions } })],
-        1
-      ),
-      _vm._v(" "),
-      _c(
         "button",
         {
           staticClass: "btn btn-primary",
@@ -56417,7 +56372,7 @@ var render = function() {
             "data-target": "#createEvent"
           }
         },
-        [_vm._v("Add")]
+        [_vm._v("\n    Add\n  ")]
       ),
       _vm._v(" "),
       _c(
@@ -56432,12 +56387,17 @@ var render = function() {
             "data-target": "#detailEvent"
           }
         },
-        [_vm._v("detail")]
+        [_vm._v("\n\n\n    detail\n  ")]
       ),
       _vm._v(" "),
       _c("addEvent-component", {
-        attrs: { user_id: this.user.id },
+        attrs: { user_id: _vm.user.id, infoSelected: _vm.infoSelected },
         on: { evnetCreated: _vm.getEvents }
+      }),
+      _vm._v(" "),
+      _c("Fullcalendar", {
+        staticStyle: { "margin-right": "10px", "margin-left": "10px" },
+        attrs: { options: _vm.calendarOptions }
       })
     ],
     1
@@ -56475,8 +56435,7 @@ var render = function() {
         role: "dialog",
         "aria-labelledby": "create",
         "aria-hidden": "true"
-      },
-      on: { mouseenter: _vm.getEvent }
+      }
     },
     [
       _c(
@@ -56492,80 +56451,6 @@ var render = function() {
                 _vm._v(" "),
                 _c("form", [
                   _c("div", { staticClass: "block-content font-size-sm" }, [
-                    _c("input", {
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "hidden",
-                        id: "event_id",
-                        name: "event_id",
-                        required: ""
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.event.start,
-                          expression: "event.start"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "hidden",
-                        id: "start_event",
-                        name: "start",
-                        required: ""
-                      },
-                      domProps: { value: _vm.event.start },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.event, "start", $event.target.value)
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.event.end,
-                          expression: "event.end"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "hidden",
-                        name: "end_event",
-                        id: "end_event",
-                        required: ""
-                      },
-                      domProps: { value: _vm.event.end },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.event, "end", $event.target.value)
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("input", {
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "hidden",
-                        id: "type_event",
-                        name: "type",
-                        required: ""
-                      }
-                    }),
-                    _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
                       _c("label", [_vm._v("title")]),
                       _vm._v(" "),
@@ -56660,8 +56545,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.start_time_event,
-                            expression: "start_time_event"
+                            value: _vm.start,
+                            expression: "start"
                           }
                         ],
                         staticClass: "form-control",
@@ -56671,13 +56556,13 @@ var render = function() {
                           id: "start_time_event",
                           required: ""
                         },
-                        domProps: { value: _vm.start_time_event },
+                        domProps: { value: _vm.start },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.start_time_event = $event.target.value
+                            _vm.start = $event.target.value
                           }
                         }
                       })
@@ -56691,8 +56576,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.end_time_event,
-                            expression: "end_time_event"
+                            value: _vm.end,
+                            expression: "end"
                           }
                         ],
                         staticClass: "form-control",
@@ -56702,13 +56587,13 @@ var render = function() {
                           id: "end_time_event",
                           required: ""
                         },
-                        domProps: { value: _vm.end_time_event },
+                        domProps: { value: _vm.end },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.end_time_event = $event.target.value
+                            _vm.end = $event.target.value
                           }
                         }
                       })
@@ -75371,7 +75256,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _AgendaComponent_vue_vue_type_template_id_91092b94___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AgendaComponent.vue?vue&type=template&id=91092b94& */ "./resources/js/components/AgendaComponent.vue?vue&type=template&id=91092b94&");
+/* harmony import */ var _AgendaComponent_vue_vue_type_template_id_91092b94_ref_miaw___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AgendaComponent.vue?vue&type=template&id=91092b94&ref=miaw& */ "./resources/js/components/AgendaComponent.vue?vue&type=template&id=91092b94&ref=miaw&");
 /* harmony import */ var _AgendaComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AgendaComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/AgendaComponent.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
@@ -75383,8 +75268,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _AgendaComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _AgendaComponent_vue_vue_type_template_id_91092b94___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _AgendaComponent_vue_vue_type_template_id_91092b94___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _AgendaComponent_vue_vue_type_template_id_91092b94_ref_miaw___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AgendaComponent_vue_vue_type_template_id_91092b94_ref_miaw___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -75413,19 +75298,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/AgendaComponent.vue?vue&type=template&id=91092b94&":
-/*!************************************************************************************!*\
-  !*** ./resources/js/components/AgendaComponent.vue?vue&type=template&id=91092b94& ***!
-  \************************************************************************************/
+/***/ "./resources/js/components/AgendaComponent.vue?vue&type=template&id=91092b94&ref=miaw&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/AgendaComponent.vue?vue&type=template&id=91092b94&ref=miaw& ***!
+  \*********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AgendaComponent_vue_vue_type_template_id_91092b94___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./AgendaComponent.vue?vue&type=template&id=91092b94& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AgendaComponent.vue?vue&type=template&id=91092b94&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AgendaComponent_vue_vue_type_template_id_91092b94___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AgendaComponent_vue_vue_type_template_id_91092b94_ref_miaw___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./AgendaComponent.vue?vue&type=template&id=91092b94&ref=miaw& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AgendaComponent.vue?vue&type=template&id=91092b94&ref=miaw&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AgendaComponent_vue_vue_type_template_id_91092b94_ref_miaw___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AgendaComponent_vue_vue_type_template_id_91092b94___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AgendaComponent_vue_vue_type_template_id_91092b94_ref_miaw___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -75435,15 +75320,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!**********************************************************!*\
   !*** ./resources/js/components/DetailEventComponent.vue ***!
   \**********************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DetailEventComponent_vue_vue_type_template_id_60eed11f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DetailEventComponent.vue?vue&type=template&id=60eed11f& */ "./resources/js/components/DetailEventComponent.vue?vue&type=template&id=60eed11f&");
 /* harmony import */ var _DetailEventComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DetailEventComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/DetailEventComponent.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _DetailEventComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _DetailEventComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -75473,7 +75357,7 @@ component.options.__file = "resources/js/components/DetailEventComponent.vue"
 /*!***********************************************************************************!*\
   !*** ./resources/js/components/DetailEventComponent.vue?vue&type=script&lang=js& ***!
   \***********************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
