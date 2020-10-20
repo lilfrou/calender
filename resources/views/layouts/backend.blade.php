@@ -28,8 +28,8 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700">
     <link rel="stylesheet" id="css-main" href="{{ asset('css/oneui.css') }}">
-    <link rel="stylesheet" id="css-main" href="{{ asset('css/custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('dist/dropzone.css') }}">
+    {{-- <link rel="stylesheet" id="css-main" href="{{ asset('css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('dist/dropzone.css') }}"> --}}
     {{-- <script src="{{ asset('dist/dropzone.js') }}"></script>
     <script src="{{ asset('dist/min/dropzone.min.js') }}"></script> --}}
 

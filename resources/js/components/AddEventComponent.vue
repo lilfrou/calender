@@ -94,7 +94,7 @@ export default {
                return;
            }
          axios
-        .post("api/event/create", {
+        .post("event/createmeeting", {
           user_id:this.user_id,
           start:  this.start,
           end: this.end,
@@ -102,7 +102,9 @@ export default {
           description: this.description,
           location: this.location,
           attendees: this.attendees,
-        }) .then((response) => (this.$emit("evnetCreated",response)),$("#createEvent").modal("hide"))
+        }) .then((response) => (this.$emit("evnetCreated",response),console.log(response.data),this.$swal({ title:response.data.join_url,
+  text:'PASSWORD : '+response.data.password,
+   width: '800px',icon:'info'})),$("#createEvent").modal("hide"))
         .catch((error) => console.log(error))
          .finally(
             () => this.reset()

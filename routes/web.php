@@ -20,6 +20,20 @@ Auth::routes();
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/guest', [App\Http\Controllers\HomeController::class, 'index'])->name('guest');
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+//zoom
+Route::prefix('zoom')->middleware(['auth', 'user.approved' ])->group(function () {
+
+Route::get('getCode',  [App\Http\Controllers\EventController::class, 'getCode'])->name('api.getCode');
+Route::get('getToken',  [App\Http\Controllers\EventController::class, 'getToken'])->name('api.getToken');
+Route::get('zoom',  [App\Http\Controllers\EventController::class, 'zoom'])->name('event.zoom');
+});
+//event
+Route::prefix('event')->middleware(['auth', 'user.approved' ])->group(function () {
+    Route::post('/create',  [App\Http\Controllers\EventController::class, 'create'])->name('event.create');
+    Route::post('createmeeting',  [App\Http\Controllers\EventController::class, 'create_meeting'])->name('event.create_meeting');
+    Route::get('updatemeeting',  [App\Http\Controllers\EventController::class, 'update_meeting'])->name('event.update_meeting');
+
+});
 
 // User
 Route::prefix('user')->middleware(['auth', 'user.approved' ])->group(function () {

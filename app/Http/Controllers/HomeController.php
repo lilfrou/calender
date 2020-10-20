@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Token;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,8 +25,16 @@ class HomeController extends Controller
      */
     public function index()
     {
+        if(Token::where('user_id', Auth::user()->id)->first()){
+
         return Auth::user()->auth !== 'guest'
         ? view('dashboard')
-        : view('guest');
+        :view('guest');
+        }else{
+            return Auth::user()->auth !== 'guest'
+            ? view('zoom')
+            :view('guest');
+        }
     }
+
 }

@@ -71,7 +71,7 @@ export default {
   methods:{
       destroy(){
               axios
-        .post('api/event/destroy',{event_id: this.EventId})
+        .post('api/event/destroy',{event_id: this.EventId, user_id:this.event.user_id,})
         .then((response) =>  (this.$emit("eventDeleted",response)),$("#detailEvent").modal("hide"))
         .catch((error) => console.log(error));
       },

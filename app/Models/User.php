@@ -41,6 +41,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Event::class);
     }
+    protected $guarded = [];
+
+    public function token()
+    {
+        return $this->hasOne(Token::class);
+      }
     public function Auth($user_id)
     {
         return $this->where('id',$user_id)->pluck('auth');
