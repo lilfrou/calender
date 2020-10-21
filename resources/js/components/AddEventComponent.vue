@@ -168,7 +168,6 @@ export default {
           $("#createEvent").modal("hide"),
            this.$swal({
               title: 'meeting created',
-              width: "250px",
               icon: "success",
             })
         )

@@ -89,7 +89,10 @@ export default {
       destroy(){
               axios
         .post('api/event/destroy',{event_id: this.EventId, user_id:this.event.user_id,})
-        .then((response) =>  (this.$emit("eventDeleted",response)),$("#detailEvent").modal("hide"))
+        .then((response) =>  (this.$emit("eventDeleted",response)),$("#detailEvent").modal("hide"),this.$swal({
+              title: 'meeting deleted',
+              icon: "success",
+            }))
         .catch((error) => console.log(error));
       },
       getEvent(){
@@ -120,7 +123,10 @@ export default {
           title: this.event.title,
           description: this.event.description,
           password: this.event.password
-        }) .then((response) => (this.$emit("eventUpdate",response)),$("#detailEvent").modal("hide"))
+        }) .then((response) => (this.$emit("eventUpdate",response)),$("#detailEvent").modal("hide"),this.$swal({
+              title: 'meeting updated',
+              icon: "success",
+            }))
         .catch((error) => console.log(error));
       }
 

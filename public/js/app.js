@@ -19557,7 +19557,6 @@ __webpack_require__.r(__webpack_exports__);
         return _this.$emit("evnetCreated", response), console.log(response.data);
       }, $("#createEvent").modal("hide"), this.$swal({
         title: 'meeting created',
-        width: "250px",
         icon: "success"
       }))["catch"](function (error) {
         return console.log(error);
@@ -19845,7 +19844,10 @@ __webpack_require__.r(__webpack_exports__);
         user_id: this.event.user_id
       }).then(function (response) {
         return _this.$emit("eventDeleted", response);
-      }, $("#detailEvent").modal("hide"))["catch"](function (error) {
+      }, $("#detailEvent").modal("hide"), this.$swal({
+        title: 'meeting deleted',
+        icon: "success"
+      }))["catch"](function (error) {
         return console.log(error);
       });
     },
@@ -19882,7 +19884,10 @@ __webpack_require__.r(__webpack_exports__);
         password: this.event.password
       }).then(function (response) {
         return _this3.$emit("eventUpdate", response);
-      }, $("#detailEvent").modal("hide"))["catch"](function (error) {
+      }, $("#detailEvent").modal("hide"), this.$swal({
+        title: 'meeting updated',
+        icon: "success"
+      }))["catch"](function (error) {
         return console.log(error);
       });
     }
