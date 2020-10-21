@@ -28,6 +28,7 @@ Route::group(['prefix' => 'event'], function () {
     Route::get('getEvent/{event_id}',  [App\Http\Controllers\EventController::class, 'getEvent'])->name('event.getEvent');
     Route::post('destroy',  [App\Http\Controllers\EventController::class, 'destroy'])->name('event.destroy');
     Route::post('update',  [App\Http\Controllers\EventController::class, 'update'])->name('event.update');
+    Route::post('createmeeting',  [App\Http\Controllers\EventController::class, 'create_meeting'])->name('event.create_meeting');
 
 
 

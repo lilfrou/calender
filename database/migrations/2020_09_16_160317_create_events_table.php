@@ -19,10 +19,10 @@ class CreateEventsTable extends Migration
             $table->unsignedBigInteger('meeting_id');
             $table->string('title');
             $table->string('description');
-            $table->string('location');
-            $table->integer('attendees');
             $table->dateTime('start');
             $table->dateTime('end');
+            $table->string('password');
+            $table->text('join_url');
             $table->timestamps();
         });
     }

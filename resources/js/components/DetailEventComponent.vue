@@ -25,10 +25,6 @@
                             <input type="text" name="description"  class="form-control"  v-model="event.description" required>
                         </div>
                          <div class="form-group">
-                            <label>location</label>
-                            <input type="text" name="location"  class="form-control" v-model="event.location" required>
-                        </div>
-                         <div class="form-group">
                             <label>start</label>
                             <input type="time" name="start_time" id="start_time_event" v-model="start" class="form-control"  required>
                         </div>
@@ -36,9 +32,30 @@
                             <label>end</label>
                             <input type="time" name="end_time" id="end_time_event" v-model="end" class="form-control"  required>
                         </div>
-                         <div class="form-group">
-                            <label>attendees</label>
-                            <input type="number" name="attendees"  class="form-control" v-model="event.attendees" required>
+                        <div class="form-group">
+                <label>password</label>
+                <div class="input-group mb-3">
+                  <input
+                  id="password-1"
+                    type="password"
+                    class="form-control"
+                    aria-label="Recipient's username"
+                    maxlength="10"
+                    aria-describedby="basic-addon2"
+                    v-model="event.password"
+                    required
+                  />
+                  <div class="input-group-append">
+                    <button class="btn btn-sm btn-outline-info" @click="togglePassword" type="button">
+                      Show
+                    </button>
+                  </div>
+                </div>
+              </div>
+               <div class="form-group">
+                            <label>join Url</label>
+                            <textarea :value="event.join_url"  class="form-control" name="join_url" rows="4" cols="50" readonly>
+                            </textarea>
                         </div>
 
                     </div>
@@ -81,6 +98,14 @@ export default {
         .then((response) =>  this.event=response.data)
         .catch((error) => console.log(error));
       },
+       togglePassword(){
+         var x = document.getElementById("password-1");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+    },
       update(){
 
                this.start=this.event.start.split(' ', 1)[0]+'T'+this.start;
@@ -94,8 +119,7 @@ export default {
           end: this.end,
           title: this.event.title,
           description: this.event.description,
-          location: this.event.location,
-          attendees: this.event.attendees,
+          password: this.event.password
         }) .then((response) => (this.$emit("eventUpdate",response)),$("#detailEvent").modal("hide"))
         .catch((error) => console.log(error));
       }

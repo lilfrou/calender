@@ -65,9 +65,9 @@ class EventController extends Controller
                 'json' => [
                     "topic" => request('title'),
                     "type" => 2,
-                    "start_time" => "2020-10-21T23:55:00",
-                    "duration" => "60", // 30 mins
-                    "password" => "123456"
+                    "start_time" => Carbon::parse(request('start')),
+                    "duration" => Carbon::parse(request('start'))->diffInMinutes(Carbon::parse(request('end'))),
+                    "password" => request('password')
                 ],
             ]);
         } catch (Exception $e) {
@@ -99,12 +99,11 @@ class EventController extends Controller
             'title' => request('title'),
             'user_id' => request('user_id'),
             'description' => request('description'),
-            'location' => request('location'),
-            'attendees' => request('attendees'),
             'start' => request('start'),
-            'end' => request('end')
+            'end' => request('end'),
+            'password'=> request('password')
         ]);
-        
+
         return 200;
     }
     public function destroy()
@@ -149,36 +148,12 @@ class EventController extends Controller
         $event = $this->event->where('id', request('event_id'))->delete();
         return 200;
     }
-    function update_meeting(){
-        try {
-            $client = new Client(['base_uri' => 'https://zoom.us']);
-            $arr_token = json_decode($this->token->where('user_id', Auth::user()->id)->value('token'));
-
-            $accessToken = $arr_token->access_token;
-            $response = $client->request('PATCH', '/v2/meetings/75539860084', [
-                "headers" => [
-                    "Authorization" => "Bearer $accessToken"
-                ],
-                'json' => [
-                    "topic" => "firasupdated",
-                    "type" => 2,
-                    "start_time" => "2020-10-21T23:55:00",
-                    "duration" => "60", // 30 mins
-                    "password" => "123456"
-                ],
-            ]);
-        } catch (Exception $e) {
-            $e->getCode();
-        }
-
-
-    }
     function create_meeting()
     {
         try {
             $client = new Client(['base_uri' => 'https://zoom.us']);
 
-            $arr_token = json_decode($this->token->where('user_id', Auth::user()->id)->value('token'));
+            $arr_token = json_decode($this->token->where('user_id', request('user_id'))->value('token'));
 
             $accessToken = $arr_token->access_token;
 
@@ -188,11 +163,11 @@ class EventController extends Controller
                     "Authorization" => "Bearer $accessToken"
                 ],
                 'json' => [
-                    "topic" => "Let's learn Laravel",
+                    "topic" => request('title'),
                     "type" => 2,
-                    "start_time" => "2020-10-21T23:55:00",
-                    "duration" => "60", // 30 mins
-                    "password" => "123456"
+                    "start_time" => Carbon::parse(request('start')),
+                    "duration" => Carbon::parse(request('start'))->diffInMinutes(Carbon::parse(request('end'))),
+                    "password" => request('password')
                 ],
             ]);
 
@@ -202,16 +177,17 @@ class EventController extends Controller
                 'meeting_id'=>$data->id,
                 'user_id' => request('user_id'),
                 'description' => request('description'),
-                'location' => request('location'),
-                'attendees' => request('attendees'),
                 'start' => request('start'),
-                'end' => request('end')
+                'end' => request('end'),
+                "password" => request('password'),
+                "join_url" => $data->join_url
             ]);
-             return ['join_url'=> $data->join_url,'password'=>$data->password,'meeting_id'=>$data->id];
+            return 200;
+            //  return ['join_url'=> $data->join_url,'password'=>request('password'),'meeting_id'=>$data->id];
 
         } catch (Exception $e) {
             if (401 == $e->getCode()) {
-                $arr_refresh_token = json_decode($this->token->where('user_id', Auth::user()->id)->value('token'));
+                $arr_refresh_token = json_decode($this->token->where('user_id', request('user_id'))->value('token'));
                 $refresh_token = $arr_refresh_token->refresh_token;
 
                 $client = new Client(['base_uri' => 'https://zoom.us']);
@@ -226,7 +202,7 @@ class EventController extends Controller
                     ],
                 ]);
                 $token = json_decode($response->getBody()->getContents(), true);
-                $this->tokenUpdateCreate($token,Auth::user()->id);
+                $this->tokenUpdateCreate($token,request('user_id'));
 
                 $this->create_meeting();
             } else {

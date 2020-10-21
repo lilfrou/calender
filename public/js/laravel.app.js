@@ -19446,18 +19446,73 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       title: "",
       description: "",
-      location: "",
-      attendees: "",
       start_time: "",
       end_time: "",
       start: "",
       end: "",
-      type: ""
+      type: "",
+      password: ""
     };
   },
   props: ["user_id", "infoSelected"],
@@ -19465,40 +19520,46 @@ __webpack_require__.r(__webpack_exports__);
     reset: function reset() {
       this.title = "";
       this.description = "";
-      this.location = "";
-      this.attendees = "";
       this.start_time = "";
       this.end_time = "";
       this.start = "";
       this.end = "";
       this.type = "";
+      this.password = "";
+    },
+    togglePassword: function togglePassword() {
+      var x = document.getElementById("password-0");
+
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
     },
     create: function create() {
       var _this = this;
 
-      if (this.type == 'dayGridMonth') {
-        this.start += 'T' + this.start_time;
-        this.end += 'T' + this.end_time;
+      if (this.type == "dayGridMonth") {
+        this.start += "T" + this.start_time;
+        this.end += "T" + this.end_time;
       } else {
         return;
       }
 
-      axios.post("event/createmeeting", {
+      axios.post("api/event/createmeeting", {
         user_id: this.user_id,
         start: this.start,
         end: this.end,
         title: this.title,
         description: this.description,
-        location: this.location,
-        attendees: this.attendees
+        password: this.password
       }).then(function (response) {
-        return _this.$emit("evnetCreated", response), console.log(response.data), _this.$swal({
-          title: response.data.join_url,
-          text: 'PASSWORD : ' + response.data.password,
-          width: '800px',
-          icon: 'info'
-        });
-      }, $("#createEvent").modal("hide"))["catch"](function (error) {
+        return _this.$emit("evnetCreated", response), console.log(response.data);
+      }, $("#createEvent").modal("hide"), this.$swal({
+        title: 'meeting created',
+        width: "250px",
+        icon: "success"
+      }))["catch"](function (error) {
         return console.log(error);
       })["finally"](function () {
         return _this.reset();
@@ -19749,6 +19810,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -19780,6 +19858,15 @@ __webpack_require__.r(__webpack_exports__);
         return console.log(error);
       });
     },
+    togglePassword: function togglePassword() {
+      var x = document.getElementById("password-1");
+
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    },
     update: function update() {
       var _this3 = this;
 
@@ -19792,8 +19879,7 @@ __webpack_require__.r(__webpack_exports__);
         end: this.end,
         title: this.event.title,
         description: this.event.description,
-        location: this.event.location,
-        attendees: this.event.attendees
+        password: this.event.password
       }).then(function (response) {
         return _this3.$emit("eventUpdate", response);
       }, $("#detailEvent").modal("hide"))["catch"](function (error) {
@@ -59483,32 +59569,6 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
-                      _c("label", [_vm._v("location")]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.location,
-                            expression: "location"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", name: "location", required: "" },
-                        domProps: { value: _vm.location },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.location = $event.target.value
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group" }, [
                       _c("label", [_vm._v("start")]),
                       _vm._v(" "),
                       _c("input", {
@@ -59571,33 +59631,54 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
-                      _c("label", [_vm._v("attendees")]),
+                      _c("label", [_vm._v("password")]),
                       _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.attendees,
-                            expression: "attendees"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          type: "number",
-                          name: "attendees",
-                          required: ""
-                        },
-                        domProps: { value: _vm.attendees },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                      _c("div", { staticClass: "input-group mb-3" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.password,
+                              expression: "password"
                             }
-                            _vm.attendees = $event.target.value
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            id: "password-0",
+                            type: "password",
+                            "aria-label": "Recipient's username",
+                            maxlength: "10",
+                            "aria-describedby": "basic-addon2",
+                            required: ""
+                          },
+                          domProps: { value: _vm.password },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.password = $event.target.value
+                            }
                           }
-                        }
-                      })
+                        }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "input-group-append" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-outline-info",
+                              attrs: { type: "button" },
+                              on: { click: _vm.togglePassword }
+                            },
+                            [
+                              _vm._v(
+                                "\n                    Show\n                  "
+                              )
+                            ]
+                          )
+                        ])
+                      ])
                     ])
                   ]),
                   _vm._v(" "),
@@ -59615,7 +59696,7 @@ var render = function() {
                           attrs: { type: "button", "data-dismiss": "modal" },
                           on: { click: _vm.reset }
                         },
-                        [_vm._v("close")]
+                        [_vm._v("\n              close\n            ")]
                       ),
                       _vm._v(" "),
                       _c(
@@ -59625,7 +59706,7 @@ var render = function() {
                           attrs: { type: "button" },
                           on: { click: _vm.create }
                         },
-                        [_vm._v("create")]
+                        [_vm._v("\n              create\n            ")]
                       )
                     ]
                   )
@@ -59898,32 +59979,6 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
-                      _c("label", [_vm._v("location")]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.event.location,
-                            expression: "event.location"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", name: "location", required: "" },
-                        domProps: { value: _vm.event.location },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.event, "location", $event.target.value)
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group" }, [
                       _c("label", [_vm._v("start")]),
                       _vm._v(" "),
                       _c("input", {
@@ -59986,36 +60041,72 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
-                      _c("label", [_vm._v("attendees")]),
+                      _c("label", [_vm._v("password")]),
                       _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.event.attendees,
-                            expression: "event.attendees"
+                      _c("div", { staticClass: "input-group mb-3" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.event.password,
+                              expression: "event.password"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            id: "password-1",
+                            type: "password",
+                            "aria-label": "Recipient's username",
+                            maxlength: "10",
+                            "aria-describedby": "basic-addon2",
+                            required: ""
+                          },
+                          domProps: { value: _vm.event.password },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.event,
+                                "password",
+                                $event.target.value
+                              )
+                            }
                           }
-                        ],
+                        }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "input-group-append" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-outline-info",
+                              attrs: { type: "button" },
+                              on: { click: _vm.togglePassword }
+                            },
+                            [
+                              _vm._v(
+                                "\n                      Show\n                    "
+                              )
+                            ]
+                          )
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", [_vm._v("join Url")]),
+                      _vm._v(" "),
+                      _c("textarea", {
                         staticClass: "form-control",
                         attrs: {
-                          type: "number",
-                          name: "attendees",
-                          required: ""
+                          name: "join_url",
+                          rows: "4",
+                          cols: "50",
+                          readonly: ""
                         },
-                        domProps: { value: _vm.event.attendees },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.event,
-                              "attendees",
-                              $event.target.value
-                            )
-                          }
-                        }
+                        domProps: { value: _vm.event.join_url }
                       })
                     ])
                   ]),
