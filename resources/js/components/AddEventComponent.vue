@@ -35,6 +35,7 @@
                   v-model="title"
                   required
                 />
+                <span v-if="msg.title">{{ msg.title }}</span>
               </div>
               <div class="form-group">
                 <label>description</label>
@@ -48,7 +49,7 @@
               </div>
 
               <div class="form-group">
-                <label>start</label>
+                <label for="start_time">start</label>
                 <input
                   type="time"
                   name="start_time"
@@ -58,22 +59,45 @@
                   required
                 />
               </div>
-              <div class="form-group">
-                <label>end</label>
-                <input
-                  type="time"
-                  name="end_time"
-                  id="end_time"
-                  v-model="end_time"
-                  class="form-control"
-                  required
-                />
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label>hours</label>
+
+                    <select class="form-control" v-model="hours" required>
+                      <option selected disabled>Empty</option>
+                      <option v-for="(n, hour) in 25" :key="hour" :value="hour">
+                        <p v-if="hour === 0 || hour === 1">{{ hour }} hour</p>
+                        <p v-else>{{ hour }} hours</p>
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label>minutes</label>
+
+                    <select class="form-control" v-model="minutes" required>
+                      <option selected disabled>Empty</option>
+                      <option
+                        v-for="(n, minute) in 60"
+                        :key="minute"
+                        :value="minute"
+                      >
+                        <p v-if="minute === 0 || minute === 1">
+                          {{ minute }} minute
+                        </p>
+                        <p v-else>{{ minute }} minutes</p>
+                      </option>
+                    </select>
+                  </div>
+                </div>
               </div>
               <div class="form-group">
                 <label>password</label>
                 <div class="input-group mb-3">
                   <input
-                  id="password-0"
+                    id="password-0"
                     type="password"
                     class="form-control"
                     aria-label="Recipient's username"
@@ -83,7 +107,11 @@
                     required
                   />
                   <div class="input-group-append">
-                    <button class="btn btn-sm btn-outline-info" @click="togglePassword" type="button">
+                    <button
+                      class="btn btn-sm btn-outline-info"
+                      @click="togglePassword"
+                      type="button"
+                    >
                       Show
                     </button>
                   </div>
@@ -93,13 +121,17 @@
             <div class="block-content block-content-full text-right border-top">
               <button
                 type="button"
-                class="btn btn-secondary"
+                class="btn btn-outline-secondary"
                 @click="reset"
                 data-dismiss="modal"
               >
                 close
               </button>
-              <button type="button" class="btn btn-primary" @click="create">
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                @click="create"
+              >
                 create
               </button>
             </div>
@@ -109,7 +141,6 @@
     </div>
   </div>
 </template>
-
 <script>
 export default {
   data() {
@@ -117,11 +148,13 @@ export default {
       title: "",
       description: "",
       start_time: "",
-      end_time: "",
+      hours: "Empty",
+      minutes: "Empty",
       start: "",
       end: "",
       type: "",
       password: "",
+      msg: [],
     };
   },
   props: ["user_id", "infoSelected"],
@@ -130,46 +163,58 @@ export default {
       this.title = "";
       this.description = "";
       this.start_time = "";
-      this.end_time = "";
-      this.start = "";
+      (this.hours = "Empty"), (this.minutes = "Empty"), (this.start = "");
       this.end = "";
       this.type = "";
       this.password = "";
     },
-    togglePassword(){
-         var x = document.getElementById("password-0");
-  if (x.type === "password") {
-    x.type = "text";
-  } else {
-    x.type = "password";
-  }
-    },
-    create() {
-      if (this.type == "dayGridMonth") {
-        this.start += "T" + this.start_time;
-        this.end += "T" + this.end_time;
+    togglePassword() {
+      var x = document.getElementById("password-0");
+      if (x.type === "password") {
+        x.type = "text";
       } else {
-        return;
+        x.type = "password";
       }
+    },
+    validateTitle(value) {
+      console.log(value);
+      if (this.title.length!=1) {
+      this.msg["title"] = "";
+
+      } else {
+          this.msg["title"] = "Title is required";
+        return;
+
+      }
+    },
+
+    create() {
+      //   if (this.type == "dayGridMonth") {
+      //     this.start += "T" + this.start_time;
+      //     this.end += "T" + this.end_time;
+      //   } else {
+      //     return;
+      //   }
+     this.validateTitle("null");
       axios
         .post("api/event/createmeeting", {
           user_id: this.user_id,
-          start: this.start,
-          end: this.end,
+          duration: this.hours * 60 + this.minutes,
+          start: this.start + "T" + this.start_time,
+          //   end: this.end,
           title: this.title,
           description: this.description,
           password: this.password,
         })
         .then(
           (response) => (
-            this.$emit("evnetCreated", response),
-            console.log(response.data)
+            this.$emit("evnetCreated", response), console.log(response.data)
           ),
           $("#createEvent").modal("hide"),
-           this.$swal({
-              title: 'meeting created',
-              icon: "success",
-            })
+          this.$swal({
+            title: "meeting created",
+            icon: "success",
+          })
         )
         .catch((error) => console.log(error))
         .finally(() => this.reset());
@@ -178,10 +223,22 @@ export default {
   watch: {
     infoSelected: function (newValue) {
       this.start = newValue.startStr;
-      this.end = newValue.startStr;
+      //   this.end = newValue.startStr;
       this.type = newValue.view.type;
+    },
+    title(value) {
+      // binding this to the data value in the email input
+
+      this.validateTitle(value);
     },
   },
 };
 </script>
 
+<style scoped>
+span {
+  padding-top: 0px;
+  margin-top: 0px;
+  font-size: 12px; color:red;
+}
+</style>

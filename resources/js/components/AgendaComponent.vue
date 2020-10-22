@@ -133,7 +133,7 @@ export default {
     this.EventId=0;
       axios
         .get(`api/event/login/${this.user.id}`)
-        .then((response) => (this.calendarOptions.events = response.data))
+        .then((response) => (this.calendarOptions.events = response.data, console.log(response.data)))
         .catch((error) => console.log(error));
     },
     refresh(filtred) {

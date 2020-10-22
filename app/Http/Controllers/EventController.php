@@ -66,7 +66,7 @@ class EventController extends Controller
                     "topic" => request('title'),
                     "type" => 2,
                     "start_time" => Carbon::parse(request('start')),
-                    "duration" => Carbon::parse(request('start'))->diffInMinutes(Carbon::parse(request('end'))),
+                    "duration" => request('duration'),
                     "password" => request('password')
                 ],
             ]);
@@ -100,7 +100,8 @@ class EventController extends Controller
             'user_id' => request('user_id'),
             'description' => request('description'),
             'start' => request('start'),
-            'end' => request('end'),
+            'duration'=>request('duration'),
+            'end' => Carbon::parse(request('start'))->addMinutes(request('duration')),
             'password'=> request('password')
         ]);
 
@@ -166,7 +167,7 @@ class EventController extends Controller
                     "topic" => request('title'),
                     "type" => 2,
                     "start_time" => Carbon::parse(request('start')),
-                    "duration" => Carbon::parse(request('start'))->diffInMinutes(Carbon::parse(request('end'))),
+                    "duration" => request('duration'),
                     "password" => request('password')
                 ],
             ]);
@@ -178,7 +179,8 @@ class EventController extends Controller
                 'user_id' => request('user_id'),
                 'description' => request('description'),
                 'start' => request('start'),
-                'end' => request('end'),
+                'duration'=>request('duration'),
+                'end' => Carbon::parse(request('start'))->addMinutes(request('duration')),
                 "password" => request('password'),
                 "join_url" => $data->join_url
             ]);

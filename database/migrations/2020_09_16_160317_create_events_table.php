@@ -21,6 +21,7 @@ class CreateEventsTable extends Migration
             $table->string('description');
             $table->dateTime('start');
             $table->dateTime('end');
+            $table->integer('duration');
             $table->string('password');
             $table->text('join_url');
             $table->timestamps();
