@@ -128,6 +128,7 @@
                 close
               </button>
               <button
+               id="create_button"
                 type="button"
                 class="btn btn-outline-primary"
                 @click="create"
@@ -196,6 +197,7 @@ export default {
       //     return;
       //   }
      this.validateTitle("null");
+     $('#create_button').html('<span id="span_created" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').attr("disabled", true);
       axios
         .post("api/event/createmeeting", {
           user_id: this.user_id,
@@ -210,11 +212,6 @@ export default {
           (response) => (
             this.$emit("evnetCreated", response), console.log(response.data)
           ),
-          $("#createEvent").modal("hide"),
-          this.$swal({
-            title: "meeting created",
-            icon: "success",
-          })
         )
         .catch((error) => console.log(error))
         .finally(() => this.reset());

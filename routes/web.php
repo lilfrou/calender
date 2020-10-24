@@ -26,6 +26,7 @@ Route::prefix('zoom')->middleware(['auth', 'user.approved' ])->group(function ()
 Route::get('getCode',  [App\Http\Controllers\EventController::class, 'getCode'])->name('api.getCode');
 Route::get('getToken',  [App\Http\Controllers\EventController::class, 'getToken'])->name('api.getToken');
 Route::get('zoom',  [App\Http\Controllers\EventController::class, 'zoom'])->name('event.zoom');
+Route::get('createSubUser',  [App\Http\Controllers\EventController::class, 'createSubUser'])->name('api.createSubUser');
 });
 
 // User

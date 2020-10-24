@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','auth'
+        'name', 'email', 'password','auth','zoom_user_id','zoom_user_type','zoom_status'
     ];
 
     /**

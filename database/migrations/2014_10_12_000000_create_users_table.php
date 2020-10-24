@@ -20,6 +20,9 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('auth')->default('guest');
+            $table->text('zoom_user_id')->nullable();
+            $table->text('zoom_user_type')->nullable();
+            $table->string('zoom_user_status')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
