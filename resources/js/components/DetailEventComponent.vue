@@ -131,15 +131,15 @@
             <div class="block-content block-content-full text-right border-top">
               <button
                 type="button"
-                class="btn btn-outline-secondary"
+                class="btn btn-sm btn-outline-secondary"
                 data-dismiss="modal"
               >
                 close
               </button>
-              <button type="button" class="btn btn-outline-danger" @click="destroy">
+              <button type="button" class="btn  btn-sm btn-outline-danger" @click="destroy">
                 delete
               </button>
-              <button type="button" class="btn btn-outline-primary" @click="update">
+              <button id="detail_button" type="button" class="btn  btn-sm btn-outline-primary" @click="update">
                 update
               </button>
             </div>
@@ -194,6 +194,8 @@ export default {
       }
     },
     update() {
+ $('#detail_button').html('<span id="span_detail" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').attr("disabled", true);
+
       this.start = this.event.start.split(" ", 1)[0] + "T" + this.start;
     //   this.end = this.event.end.split(" ", 1)[0] + "T" + this.end;
 
@@ -209,11 +211,6 @@ export default {
         })
         .then(
           (response) => this.$emit("eventUpdate", response),
-          $("#detailEvent").modal("hide"),
-          this.$swal({
-            title: "meeting updated",
-            icon: "success",
-          })
         )
         .catch((error) => console.log(error));
     },

@@ -35,7 +35,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->auth === 'operator' && Auth::user()->zoom_user_status !== 'active') {
+        if (Auth::user()->auth === 'operator' && Auth::user()->zoom_user_status !== 'active' && Auth::user()->zoom_user_id !==null) {
             $this->checkEmailValidation();
         }
         if (Token::where('user_id', Auth::user()->id)->first()) {
@@ -43,10 +43,13 @@ class HomeController extends Controller
                 ? view('dashboard')
                 : view('guest');
         } else {
-            if (Auth::user()->auth === 'operator' && Auth::user()->zoom_user_status !== 'active') {
+            if (Auth::user()->auth === 'operator' && Auth::user()->zoom_user_status !== 'active' && Auth::user()->zoom_user_id !==null) {
 
                 return view('zoom-email-validation');
             } else {
+                if (Auth::user()->auth === 'operator' && Auth::user()->zoom_user_status === 'active' && Auth::user()->zoom_user_id !==null) {
+                    return redirect()->route('api.getCode');
+                };
                 return Auth::user()->auth !== 'guest'
                     ? view('zoom')
                     : view('guest');

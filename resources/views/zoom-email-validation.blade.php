@@ -29,5 +29,10 @@
             </div>
         </div>
     </div>
+        <script type="text/javascript">
+   setTimeout(function(){
+       location.reload();
+   },10000);
+    </script>
     <!-- END Hero -->
 @endsection

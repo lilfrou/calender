@@ -19668,7 +19668,7 @@ __webpack_require__.r(__webpack_exports__);
       //     return;
       //   }
       this.validateTitle("null");
-      $('#create_button').html('<span id="span_created" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').attr("disabled", true);
+      $('#create_button').html('<span id="span_create" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').attr("disabled", true);
       axios.post("api/event/createmeeting", {
         user_id: this.user_id,
         duration: this.hours * 60 + this.minutes,
@@ -19850,9 +19850,9 @@ __webpack_require__.r(__webpack_exports__);
     var _this2 = this;
 
     window.Echo.channel("meeting.".concat(this.user.id)).listen(".meeting-event", function (e) {
-      $("#span_created").remove();
-      $("#create_button").html("create").attr("disabled", false);
-      $("#createEvent").modal("hide");
+      $("#span_" + e.type).remove();
+      $("#" + e.type + "_button").html(e.type === 'detail' ? 'update' : e.type).attr("disabled", false);
+      $("#" + e.type + "Event").modal("hide");
 
       var Toast = _this2.$swal.mixin({
         toast: true,
@@ -19866,32 +19866,37 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
 
-      var lines = [e.meeting.host_email + ' is inviting you to a scheduled Zoom meeting.', 'topic: ' + e.meeting.topic + '.', 'Time: ' + e.meeting.start_time + '.', 'Join Zoom Meeting .', e.meeting.join_url + ' .', 'Passcode :' + e.meeting.password];
+      if (e.type === 'detail') {
+        Toast.fire({
+          icon: "success",
+          title: "meeting updated"
+        });
+      } else {
+        var lines = [e.meeting.host_email + ' is inviting you to a scheduled Zoom meeting.', 'topic: ' + e.meeting.topic + '.', 'Time: ' + e.meeting.start_time + '.', 'Join Zoom Meeting .', e.meeting.join_url + ' .', 'Passcode :' + e.meeting.password];
 
-      _this2.$swal({
-        title: "meeting created",
-        text: lines.join('\n\n'),
-        confirmButtonText: "Copy invitation",
-        icon: "success",
-        preConfirm: function preConfirm() {
-          return new Promise(function (resolve) {
-            if (true) {
-              var el = document.getElementById("swal2-content").textContent;
-              resolve([navigator.clipboard.writeText(el).then(function () {
-                console.log("Async: Copying to clipboard was successful!");
-                Toast.fire({
-                  icon: "success",
-                  title: "Copied"
-                });
-              }, function (err) {
-                console.error("Async: Could not copy text: ", err);
-              })]);
-            }
-          });
-        }
-      });
-
-      console.log(e.meeting);
+        _this2.$swal({
+          title: "meeting created",
+          text: lines.join('\n\n'),
+          confirmButtonText: "Copy invitation",
+          icon: "success",
+          preConfirm: function preConfirm() {
+            return new Promise(function (resolve) {
+              if (true) {
+                var el = document.getElementById("swal2-content").textContent;
+                resolve([navigator.clipboard.writeText(el).then(function () {
+                  console.log("Async: Copying to clipboard was successful!");
+                  Toast.fire({
+                    icon: "success",
+                    title: "Copied"
+                  });
+                }, function (err) {
+                  console.error("Async: Could not copy text: ", err);
+                })]);
+              }
+            });
+          }
+        });
+      }
     });
   },
   created: function created() {
@@ -20126,6 +20131,7 @@ __webpack_require__.r(__webpack_exports__);
     update: function update() {
       var _this3 = this;
 
+      $('#detail_button').html('<span id="span_detail" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').attr("disabled", true);
       this.start = this.event.start.split(" ", 1)[0] + "T" + this.start; //   this.end = this.event.end.split(" ", 1)[0] + "T" + this.end;
 
       axios.post("api/event/update", {
@@ -20138,10 +20144,7 @@ __webpack_require__.r(__webpack_exports__);
         password: this.event.password
       }).then(function (response) {
         return _this3.$emit("eventUpdate", response);
-      }, $("#detailEvent").modal("hide"), this.$swal({
-        title: "meeting updated",
-        icon: "success"
-      }))["catch"](function (error) {
+      })["catch"](function (error) {
         return console.log(error);
       });
     }
@@ -70330,7 +70333,7 @@ var render = function() {
                       _c(
                         "button",
                         {
-                          staticClass: "btn btn-outline-secondary",
+                          staticClass: "btn  btn-sm btn-outline-secondary",
                           attrs: { type: "button", "data-dismiss": "modal" },
                           on: { click: _vm.reset }
                         },
@@ -70340,7 +70343,7 @@ var render = function() {
                       _c(
                         "button",
                         {
-                          staticClass: "btn btn-outline-primary",
+                          staticClass: "btn  btn-sm btn-outline-primary",
                           attrs: { id: "create_button", type: "button" },
                           on: { click: _vm.create }
                         },
@@ -70858,7 +70861,7 @@ var render = function() {
                       _c(
                         "button",
                         {
-                          staticClass: "btn btn-outline-secondary",
+                          staticClass: "btn btn-sm btn-outline-secondary",
                           attrs: { type: "button", "data-dismiss": "modal" }
                         },
                         [_vm._v("\n              close\n            ")]
@@ -70867,7 +70870,7 @@ var render = function() {
                       _c(
                         "button",
                         {
-                          staticClass: "btn btn-outline-danger",
+                          staticClass: "btn  btn-sm btn-outline-danger",
                           attrs: { type: "button" },
                           on: { click: _vm.destroy }
                         },
@@ -70877,8 +70880,8 @@ var render = function() {
                       _c(
                         "button",
                         {
-                          staticClass: "btn btn-outline-primary",
-                          attrs: { type: "button" },
+                          staticClass: "btn  btn-sm btn-outline-primary",
+                          attrs: { id: "detail_button", type: "button" },
                           on: { click: _vm.update }
                         },
                         [_vm._v("\n              update\n            ")]

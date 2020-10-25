@@ -72,6 +72,17 @@ class EventController extends Controller
                     "password" => request('password')
                 ],
             ]);
+            $this->event->where('id', request('id'))->update([
+                'title' => request('title'),
+                'user_id' => request('user_id'),
+                'description' => request('description'),
+                'start' => request('start'),
+                'duration' => request('duration'),
+                'end' => Carbon::parse(request('start'))->addMinutes(request('duration')),
+                'password' => request('password')
+            ]);
+            broadcast(new MeetingCreatedEvent(null,request('user_id'),'detail'));
+                return 200;
         } catch (Exception $e) {
             if (401 == $e->getCode()) {
                 $arr_refresh_token = json_decode($this->token->where('user_id', request('user_id'))->value('token'));
@@ -97,17 +108,7 @@ class EventController extends Controller
             }
         }
 
-        $this->event->where('id', request('id'))->update([
-            'title' => request('title'),
-            'user_id' => request('user_id'),
-            'description' => request('description'),
-            'start' => request('start'),
-            'duration' => request('duration'),
-            'end' => Carbon::parse(request('start'))->addMinutes(request('duration')),
-            'password' => request('password')
-        ]);
 
-        return 200;
     }
     public function destroy()
     {
@@ -243,7 +244,7 @@ class EventController extends Controller
                 "password" => request('password'),
                 "join_url" => $data->join_url
             ]);
-            broadcast(new MeetingCreatedEvent($data,request('user_id')));
+            broadcast(new MeetingCreatedEvent($data,request('user_id'),'create'));
             return 200;
             //  return ['join_url'=> $data->join_url,'password'=>request('password'),'meeting_id'=>$data->id];
 

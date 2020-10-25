@@ -121,7 +121,7 @@
             <div class="block-content block-content-full text-right border-top">
               <button
                 type="button"
-                class="btn btn-outline-secondary"
+                class="btn  btn-sm btn-outline-secondary"
                 @click="reset"
                 data-dismiss="modal"
               >
@@ -130,7 +130,7 @@
               <button
                id="create_button"
                 type="button"
-                class="btn btn-outline-primary"
+                class="btn  btn-sm btn-outline-primary"
                 @click="create"
               >
                 create
@@ -197,7 +197,7 @@ export default {
       //     return;
       //   }
      this.validateTitle("null");
-     $('#create_button').html('<span id="span_created" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').attr("disabled", true);
+     $('#create_button').html('<span id="span_create" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').attr("disabled", true);
       axios
         .post("api/event/createmeeting", {
           user_id: this.user_id,

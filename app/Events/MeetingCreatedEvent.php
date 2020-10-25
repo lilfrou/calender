@@ -20,10 +20,11 @@ class MeetingCreatedEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public $data ,$user_id;
-    public function __construct($data,$user_id)
+    public $data ,$user_id,$type;
+    public function __construct($data,$user_id,$type)
     {
         $this->data=$data;
+        $this->type=$type;
         $this->user_id=$user_id;
     }
 
@@ -41,6 +42,6 @@ class MeetingCreatedEvent implements ShouldBroadcast
     }
     public function broadcastWith(){
 
-        return ['meeting' => $this->data];
+        return ['meeting' => $this->data , 'type' =>$this->type];
     }
 }

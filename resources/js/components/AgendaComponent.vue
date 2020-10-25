@@ -125,9 +125,10 @@ export default {
     window.Echo.channel(`meeting.${this.user.id}`).listen(
       ".meeting-event",
       (e) => {
-        $("#span_created").remove();
-        $("#create_button").html("create").attr("disabled", false);
-        $("#createEvent").modal("hide");
+        $("#span_"+e.type).remove();
+        $("#"+e.type+"_button").html(e.type==='detail'? 'update':e.type).attr("disabled", false);
+        $("#"+e.type+"Event").modal("hide");
+
         const Toast = this.$swal.mixin({
           toast: true,
           position: "top-end",
@@ -139,6 +140,13 @@ export default {
             toast.addEventListener("mouseleave", this.$swal.resumeTimer);
           },
         });
+         if(e.type==='detail'){
+              Toast.fire({
+                        icon: "success",
+                        title: "meeting updated",
+                      });
+
+        }else{
         const lines = [e.meeting.host_email+' is inviting you to a scheduled Zoom meeting.','topic: '+e.meeting.topic+'.','Time: '+e.meeting.start_time+'.','Join Zoom Meeting .',e.meeting.join_url+' .','Passcode :'+e.meeting.password];
         this.$swal({
           title: "meeting created",
@@ -169,7 +177,7 @@ export default {
             });
           },
         });
-        console.log(e.meeting);
+      }
       }
     );
   },
