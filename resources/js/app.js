@@ -7,7 +7,6 @@
 require('./bootstrap');
 import store from './store';
 import VueSweetalert2 from 'vue-sweetalert2';
-
 window.Vue = require('vue');
 Vue.use(require('vue-moment'));
 Vue.use(VueSweetalert2);

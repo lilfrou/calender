@@ -63,7 +63,6 @@
                     <label>hours</label>
 
                     <select class="form-control" v-model="hours" required>
-                      <option selected disabled>Empty</option>
                       <option v-for="(n, hour) in 25" :key="hour" :value="hour">
                         <p v-if="hour === 0 || hour === 1">{{ hour }} hour</p>
                         <p v-else>{{ hour }} hours</p>
@@ -76,7 +75,6 @@
                     <label>minutes</label>
 
                     <select class="form-control" v-model="minutes" required>
-                      <option selected disabled>Empty</option>
                       <option
                         v-for="(n, minute) in 60"
                         :key="minute"
@@ -167,7 +165,7 @@ export default {
       axios
         .post("api/event/destroy", {
           event_id: this.EventId,
-          user_id: this.event.user_id,
+          user_id: this.user_id,
         })
         .then(
           (response) => this.$emit("eventDeleted", response),
@@ -202,7 +200,8 @@ export default {
       axios
         .post("api/event/update", {
           id: this.EventId,
-          user_id: this.event.user_id,
+        //   user_id: this.event.user_id,
+          user_id: this.user_id,
           start: this.start,
           duration: this.hours * 60 + this.minutes,
           title: this.event.title,

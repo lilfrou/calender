@@ -74,7 +74,6 @@ class EventController extends Controller
             ]);
             $this->event->where('id', request('id'))->update([
                 'title' => request('title'),
-                'user_id' => request('user_id'),
                 'description' => request('description'),
                 'start' => request('start'),
                 'duration' => request('duration'),
@@ -123,6 +122,8 @@ class EventController extends Controller
                     "Authorization" => "Bearer $accessToken"
                 ],
             ]);
+            $event = $this->event->where('id', request('event_id'))->delete();
+            return 200;
         } catch (Exception $e) {
             if (401 == $e->getCode()) {
                 $arr_refresh_token = json_decode($this->token->where('user_id', request('user_id'))->value('token'));
@@ -149,8 +150,7 @@ class EventController extends Controller
         }
 
 
-        $event = $this->event->where('id', request('event_id'))->delete();
-        return 200;
+
     }
     function createSubUser()
     {

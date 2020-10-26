@@ -19613,14 +19613,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       title: "",
       description: "",
       start_time: "",
-      hours: "Empty",
-      minutes: "Empty",
+      hours: "Select",
+      minutes: "Select",
       start: "",
       end: "",
       type: "",
@@ -19634,7 +19651,7 @@ __webpack_require__.r(__webpack_exports__);
       this.title = "";
       this.description = "";
       this.start_time = "";
-      this.hours = "Empty", this.minutes = "Empty", this.start = "";
+      this.hours = "Select", this.minutes = "Select", this.start = "";
       this.end = "";
       this.type = "";
       this.password = "";
@@ -19648,15 +19665,91 @@ __webpack_require__.r(__webpack_exports__);
         x.type = "password";
       }
     },
-    validateTitle: function validateTitle(value) {
-      console.log(value);
-
-      if (this.title.length != 1) {
-        this.msg["title"] = "";
-      } else {
-        this.msg["title"] = "Title is required";
-        return;
+    validateText: function validateText() {
+      if (this.msg.includes("title")) {
+        this.msg.splice(this.msg.indexOf("title"), 1);
       }
+
+      if (this.title == "") {
+        this.msg.push("title");
+        return false;
+      }
+
+      return true;
+    },
+    validateDescription: function validateDescription() {
+      if (this.msg.includes("description")) {
+        this.msg.splice(this.msg.indexOf("description"), 1);
+      }
+
+      if (this.description == "") {
+        this.msg.push("description");
+        return false;
+      }
+
+      return true;
+    },
+    validateStart_time: function validateStart_time() {
+      if (this.msg.includes("start_time")) {
+        this.msg.splice(this.msg.indexOf("start_time"), 1);
+      }
+
+      if (this.start_time == "") {
+        this.msg.push("start_time");
+        return false;
+      }
+
+      return true;
+    },
+    validateHours: function validateHours() {
+      if (this.msg.includes("hours")) {
+        this.msg.splice(this.msg.indexOf("hours"), 1);
+      }
+
+      if (this.hours == "Select") {
+        this.msg.push("hours");
+        return false;
+      }
+
+      return true;
+    },
+    validateMinutes: function validateMinutes() {
+      if (this.msg.includes("minutes")) {
+        this.msg.splice(this.msg.indexOf("minutes"), 1);
+      }
+
+      if (this.minutes == "Select") {
+        this.msg.push("minutes");
+        return false;
+      }
+
+      return true;
+    },
+    validatePassword: function validatePassword() {
+      if (this.msg.includes("password")) {
+        this.msg.splice(this.msg.indexOf("password"), 1);
+      }
+
+      if (this.password == "") {
+        this.msg.push("password");
+        return false;
+      }
+
+      return true;
+    },
+    checkValidation: function checkValidation() {
+      var validateText = this.validateText();
+      var validateDescription = this.validateDescription();
+      var validateStart_time = this.validateStart_time();
+      var validateHours = this.validateHours();
+      var validateMinutes = this.validateMinutes();
+      var validatePassword = this.validatePassword();
+
+      if (validateText === false || validateDescription === false || validateStart_time === false || validateHours === false || validateMinutes === false || validatePassword === false) {
+        return false;
+      }
+
+      return true;
     },
     create: function create() {
       var _this = this;
@@ -19667,8 +19760,9 @@ __webpack_require__.r(__webpack_exports__);
       //   } else {
       //     return;
       //   }
-      this.validateTitle("null");
-      $('#create_button').html('<span id="span_create" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').attr("disabled", true);
+      var checkValidation = this.checkValidation();
+      if (checkValidation === false) return;
+      $("#create_button").html('<span id="span_create" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').attr("disabled", true);
       axios.post("api/event/createmeeting", {
         user_id: this.user_id,
         duration: this.hours * 60 + this.minutes,
@@ -19692,9 +19786,47 @@ __webpack_require__.r(__webpack_exports__);
 
       this.type = newValue.view.type;
     },
-    title: function title(value) {
-      // binding this to the data value in the email input
-      this.validateTitle(value);
+    title: function title(newValue) {
+      if (newValue == "") {
+        this.msg.push("title");
+      } else if (this.msg.includes("title")) {
+        this.msg.splice(this.msg.indexOf("title"), 1);
+      }
+    },
+    description: function description(newValue) {
+      if (newValue == "") {
+        this.msg.push("description");
+      } else if (this.msg.includes("description")) {
+        this.msg.splice(this.msg.indexOf("description"), 1);
+      }
+    },
+    start_time: function start_time(newValue) {
+      if (newValue == "") {
+        this.msg.push("start_time");
+      } else if (this.msg.includes("start_time")) {
+        this.msg.splice(this.msg.indexOf("start_time"), 1);
+      }
+    },
+    hours: function hours(newValue) {
+      if (newValue == "") {
+        this.msg.push("hours");
+      } else if (this.msg.includes("hours")) {
+        this.msg.splice(this.msg.indexOf("hours"), 1);
+      }
+    },
+    minutes: function minutes(newValue) {
+      if (newValue == "") {
+        this.msg.push("minutes");
+      } else if (this.msg.includes("minutes")) {
+        this.msg.splice(this.msg.indexOf("minutes"), 1);
+      }
+    },
+    password: function password(newValue) {
+      if (newValue == "") {
+        this.msg.push("password");
+      } else if (this.msg.includes("password")) {
+        this.msg.splice(this.msg.indexOf("password"), 1);
+      }
     }
   }
 });
@@ -19718,6 +19850,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _FilterEventComponent_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./FilterEventComponent.vue */ "./resources/js/components/FilterEventComponent.vue");
 /* harmony import */ var _DetailEventComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./DetailEventComponent */ "./resources/js/components/DetailEventComponent.vue");
+//
 //
 //
 //
@@ -19832,7 +19965,7 @@ __webpack_require__.r(__webpack_exports__);
         longPressDelay: 100,
         handleWindowResize: true,
         windowResizeDelay: 0,
-        // displayEventEnd:true,
+        displayEventEnd: true,
         // editable:true,
         events: {},
         select: function select(selectionInfo) {
@@ -20081,8 +20214,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -20100,7 +20231,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.post("api/event/destroy", {
         event_id: this.EventId,
-        user_id: this.event.user_id
+        user_id: this.user_id
       }).then(function (response) {
         return _this.$emit("eventDeleted", response);
       }, $("#detailEvent").modal("hide"), this.$swal({
@@ -20136,7 +20267,8 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.post("api/event/update", {
         id: this.EventId,
-        user_id: this.event.user_id,
+        //   user_id: this.event.user_id,
+        user_id: this.user_id,
         start: this.start,
         duration: this.hours * 60 + this.minutes,
         title: this.event.title,
@@ -31143,7 +31275,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\nspan[data-v-2d8719a9] {\n  padding-top: 0px;\n  margin-top: 0px;\n  font-size: 12px; color:red;\n}\n", ""]);
+exports.push([module.i, "\n.error_field[data-v-2d8719a9] {\n  color: darkred;\n}\n", ""]);
 
 // exports
 
@@ -77994,8 +78126,12 @@ var render = function() {
                         }
                       }),
                       _vm._v(" "),
-                      _vm.msg.title
-                        ? _c("span", [_vm._v(_vm._s(_vm.msg.title))])
+                      _vm.msg.includes("title")
+                        ? _c("p", { staticClass: "error_field" }, [
+                            _vm._v(
+                              "\n                Title is required\n              "
+                            )
+                          ])
                         : _vm._e()
                     ]),
                     _vm._v(" "),
@@ -78026,7 +78162,15 @@ var render = function() {
                             _vm.description = $event.target.value
                           }
                         }
-                      })
+                      }),
+                      _vm._v(" "),
+                      _vm.msg.includes("description")
+                        ? _c("p", { staticClass: "error_field" }, [
+                            _vm._v(
+                              "\n                Description is required\n              "
+                            )
+                          ])
+                        : _vm._e()
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
@@ -78059,7 +78203,15 @@ var render = function() {
                             _vm.start_time = $event.target.value
                           }
                         }
-                      })
+                      }),
+                      _vm._v(" "),
+                      _vm.msg.includes("start_time")
+                        ? _c("p", { staticClass: "error_field" }, [
+                            _vm._v(
+                              "\n                Start_time is required\n              "
+                            )
+                          ])
+                        : _vm._e()
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "row" }, [
@@ -78101,7 +78253,7 @@ var render = function() {
                               _c(
                                 "option",
                                 { attrs: { selected: "", disabled: "" } },
-                                [_vm._v("Empty")]
+                                [_vm._v("Select")]
                               ),
                               _vm._v(" "),
                               _vm._l(25, function(n, hour) {
@@ -78121,7 +78273,15 @@ var render = function() {
                               })
                             ],
                             2
-                          )
+                          ),
+                          _vm._v(" "),
+                          _vm.msg.includes("hours")
+                            ? _c("p", { staticClass: "error_field" }, [
+                                _vm._v(
+                                  "\n                    required\n                  "
+                                )
+                              ])
+                            : _vm._e()
                         ])
                       ]),
                       _vm._v(" "),
@@ -78163,7 +78323,7 @@ var render = function() {
                               _c(
                                 "option",
                                 { attrs: { selected: "", disabled: "" } },
-                                [_vm._v("Empty")]
+                                [_vm._v("Select")]
                               ),
                               _vm._v(" "),
                               _vm._l(60, function(n, minute) {
@@ -78187,7 +78347,15 @@ var render = function() {
                               })
                             ],
                             2
-                          )
+                          ),
+                          _vm._v(" "),
+                          _vm.msg.includes("minutes")
+                            ? _c("p", { staticClass: "error_field" }, [
+                                _vm._v(
+                                  "\n                    required\n                  "
+                                )
+                              ])
+                            : _vm._e()
                         ])
                       ])
                     ]),
@@ -78240,7 +78408,15 @@ var render = function() {
                             ]
                           )
                         ])
-                      ])
+                      ]),
+                      _vm._v(" "),
+                      _vm.msg.includes("password")
+                        ? _c("p", { staticClass: "error_field" }, [
+                            _vm._v(
+                              "\n                Password is required\n              "
+                            )
+                          ])
+                        : _vm._e()
                     ])
                   ]),
                   _vm._v(" "),
@@ -78254,7 +78430,7 @@ var render = function() {
                       _c(
                         "button",
                         {
-                          staticClass: "btn  btn-sm btn-outline-secondary",
+                          staticClass: "btn btn-sm btn-outline-secondary",
                           attrs: { type: "button", "data-dismiss": "modal" },
                           on: { click: _vm.reset }
                         },
@@ -78264,7 +78440,7 @@ var render = function() {
                       _c(
                         "button",
                         {
-                          staticClass: "btn  btn-sm btn-outline-primary",
+                          staticClass: "btn btn-sm btn-outline-primary",
                           attrs: { id: "create_button", type: "button" },
                           on: { click: _vm.create }
                         },
@@ -78375,7 +78551,7 @@ var render = function() {
                   _c("filtercomponent", { on: { eventFiltred: _vm.refresh } }),
                   _vm._v(" "),
                   _c("detailcomponent", {
-                    attrs: { EventId: _vm.EventId },
+                    attrs: { user_id: _vm.user.id, EventId: _vm.EventId },
                     on: {
                       eventDeleted: _vm.getEvents,
                       eventUpdate: _vm.getEvents
@@ -78606,30 +78782,18 @@ var render = function() {
                                 }
                               }
                             },
-                            [
-                              _c(
+                            _vm._l(25, function(n, hour) {
+                              return _c(
                                 "option",
-                                { attrs: { selected: "", disabled: "" } },
-                                [_vm._v("Empty")]
-                              ),
-                              _vm._v(" "),
-                              _vm._l(25, function(n, hour) {
-                                return _c(
-                                  "option",
-                                  { key: hour, domProps: { value: hour } },
-                                  [
-                                    hour === 0 || hour === 1
-                                      ? _c("p", [
-                                          _vm._v(_vm._s(hour) + " hour")
-                                        ])
-                                      : _c("p", [
-                                          _vm._v(_vm._s(hour) + " hours")
-                                        ])
-                                  ]
-                                )
-                              })
-                            ],
-                            2
+                                { key: hour, domProps: { value: hour } },
+                                [
+                                  hour === 0 || hour === 1
+                                    ? _c("p", [_vm._v(_vm._s(hour) + " hour")])
+                                    : _c("p", [_vm._v(_vm._s(hour) + " hours")])
+                                ]
+                              )
+                            }),
+                            0
                           )
                         ])
                       ]),
@@ -78668,34 +78832,26 @@ var render = function() {
                                 }
                               }
                             },
-                            [
-                              _c(
+                            _vm._l(60, function(n, minute) {
+                              return _c(
                                 "option",
-                                { attrs: { selected: "", disabled: "" } },
-                                [_vm._v("Empty")]
-                              ),
-                              _vm._v(" "),
-                              _vm._l(60, function(n, minute) {
-                                return _c(
-                                  "option",
-                                  { key: minute, domProps: { value: minute } },
-                                  [
-                                    minute === 0 || minute === 1
-                                      ? _c("p", [
-                                          _vm._v(
-                                            "\n                        " +
-                                              _vm._s(minute) +
-                                              " minute\n                      "
-                                          )
-                                        ])
-                                      : _c("p", [
-                                          _vm._v(_vm._s(minute) + " minutes")
-                                        ])
-                                  ]
-                                )
-                              })
-                            ],
-                            2
+                                { key: minute, domProps: { value: minute } },
+                                [
+                                  minute === 0 || minute === 1
+                                    ? _c("p", [
+                                        _vm._v(
+                                          "\n                        " +
+                                            _vm._s(minute) +
+                                            " minute\n                      "
+                                        )
+                                      ])
+                                    : _c("p", [
+                                        _vm._v(_vm._s(minute) + " minutes")
+                                      ])
+                                ]
+                              )
+                            }),
+                            0
                           )
                         ])
                       ])

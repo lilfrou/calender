@@ -26,6 +26,7 @@
             </div>
             <filtercomponent @eventFiltred="refresh"></filtercomponent>
             <detailcomponent
+            :user_id="user.id"
               :EventId="EventId"
               @eventDeleted="getEvents"
               @eventUpdate="getEvents"
@@ -106,7 +107,7 @@ export default {
         handleWindowResize: true,
         windowResizeDelay: 0,
 
-        // displayEventEnd:true,
+        displayEventEnd:true,
 
         // editable:true,
         events: {},
