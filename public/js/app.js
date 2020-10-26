@@ -19630,6 +19630,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -19642,7 +19645,8 @@ __webpack_require__.r(__webpack_exports__);
       end: "",
       type: "",
       password: "",
-      msg: []
+      msg: [],
+      validate: true
     };
   },
   props: ["user_id", "infoSelected"],
@@ -19655,6 +19659,22 @@ __webpack_require__.r(__webpack_exports__);
       this.end = "";
       this.type = "";
       this.password = "";
+      this.msg = [];
+      this.validate = false;
+    },
+    changed: function changed() {
+      if (this.hours === 24) {
+        this.minutes = 0;
+        $("#minutes-0").prop("disabled", true);
+        $("#minutes_0").prop("disabled", false);
+      } else if (this.hours === 0) {
+        $("#minutes-0").prop("disabled", false);
+        $("#minutes_0").prop("disabled", true);
+        this.minutes = 1;
+      } else {
+        $("#minutes-0").prop("disabled", false);
+        $("#minutes_0").prop("disabled", false);
+      }
     },
     togglePassword: function togglePassword() {
       var x = document.getElementById("password-0");
@@ -19787,42 +19807,42 @@ __webpack_require__.r(__webpack_exports__);
       this.type = newValue.view.type;
     },
     title: function title(newValue) {
-      if (newValue == "") {
+      if (newValue == "" && this.validate) {
         this.msg.push("title");
       } else if (this.msg.includes("title")) {
         this.msg.splice(this.msg.indexOf("title"), 1);
       }
     },
     description: function description(newValue) {
-      if (newValue == "") {
+      if (newValue == "" && this.validate) {
         this.msg.push("description");
       } else if (this.msg.includes("description")) {
         this.msg.splice(this.msg.indexOf("description"), 1);
       }
     },
     start_time: function start_time(newValue) {
-      if (newValue == "") {
+      if (newValue == "" && this.validate) {
         this.msg.push("start_time");
       } else if (this.msg.includes("start_time")) {
         this.msg.splice(this.msg.indexOf("start_time"), 1);
       }
     },
     hours: function hours(newValue) {
-      if (newValue == "") {
+      if (newValue == "Select" && this.validate) {
         this.msg.push("hours");
       } else if (this.msg.includes("hours")) {
         this.msg.splice(this.msg.indexOf("hours"), 1);
       }
     },
     minutes: function minutes(newValue) {
-      if (newValue == "") {
+      if (newValue == "Select" && this.validate) {
         this.msg.push("minutes");
       } else if (this.msg.includes("minutes")) {
         this.msg.splice(this.msg.indexOf("minutes"), 1);
       }
     },
     password: function password(newValue) {
-      if (newValue == "") {
+      if (newValue == "" && this.validate) {
         this.msg.push("password");
       } else if (this.msg.includes("password")) {
         this.msg.splice(this.msg.indexOf("password"), 1);
@@ -19850,6 +19870,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _FilterEventComponent_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./FilterEventComponent.vue */ "./resources/js/components/FilterEventComponent.vue");
 /* harmony import */ var _DetailEventComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./DetailEventComponent */ "./resources/js/components/DetailEventComponent.vue");
+//
+//
 //
 //
 //
@@ -19974,7 +19996,7 @@ __webpack_require__.r(__webpack_exports__);
         },
         eventClick: function eventClick(eventClickInfo) {
           _this.EventId = eventClickInfo.event.id;
-          document.getElementById("detail-button").click();
+          document.getElementById("detail-button").click(); //   this.$refs.detail_event.changed();
         }
       }
     };
@@ -20214,6 +20236,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -20226,6 +20249,20 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: ["user_id", "EventId"],
   methods: {
+    changed: function changed() {
+      if (this.hours === 24) {
+        this.minutes = 0;
+        $("#minutes-0-0").prop("disabled", true);
+        $("#minutes_0_0").prop("disabled", false);
+      } else if (this.hours === 0) {
+        $("#minutes_0_0").prop("disabled", true);
+        $("#minutes-0-0").prop("disabled", false);
+        this.minutes = 1;
+      } else {
+        $("#minutes-0-0").prop("disabled", false);
+        $("#minutes_0_0").prop("disabled", false);
+      }
+    },
     destroy: function destroy() {
       var _this = this;
 
@@ -20291,6 +20328,7 @@ __webpack_require__.r(__webpack_exports__);
       this.start = newValue.start.split(" ")[1];
       this.hours = parseInt(newValue.duration / 60);
       this.minutes = parseInt(newValue.duration % 60);
+      this.changed();
     }
   }
 });
@@ -78078,6 +78116,7 @@ var render = function() {
   return _c(
     "div",
     {
+      ref: "createEvent",
       staticClass: "modal fade",
       attrs: {
         id: "createEvent",
@@ -78097,7 +78136,27 @@ var render = function() {
               "div",
               { staticClass: "block block-themed block-transparent mb-0" },
               [
-                _vm._m(0),
+                _c("div", { staticClass: "block-header bg-primary-dark" }, [
+                  _c("h3", { staticClass: "block-title" }, [
+                    _vm._v("add_event")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "block-options" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn-block-option",
+                        attrs: {
+                          type: "button",
+                          "data-dismiss": "modal",
+                          "aria-label": "Close"
+                        },
+                        on: { click: _vm.reset }
+                      },
+                      [_c("i", { staticClass: "fa fa-fw fa-times" })]
+                    )
+                  ])
+                ]),
                 _vm._v(" "),
                 _c("form", [
                   _c("div", { staticClass: "block-content font-size-sm" }, [
@@ -78233,20 +78292,23 @@ var render = function() {
                               staticClass: "form-control",
                               attrs: { required: "" },
                               on: {
-                                change: function($event) {
-                                  var $$selectedVal = Array.prototype.filter
-                                    .call($event.target.options, function(o) {
-                                      return o.selected
-                                    })
-                                    .map(function(o) {
-                                      var val =
-                                        "_value" in o ? o._value : o.value
-                                      return val
-                                    })
-                                  _vm.hours = $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                }
+                                change: [
+                                  function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.hours = $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  },
+                                  _vm.changed
+                                ]
                               }
                             },
                             [
@@ -78301,7 +78363,7 @@ var render = function() {
                                 }
                               ],
                               staticClass: "form-control",
-                              attrs: { required: "" },
+                              attrs: { required: "", id: "minutes-0" },
                               on: {
                                 change: function($event) {
                                   var $$selectedVal = Array.prototype.filter
@@ -78329,7 +78391,11 @@ var render = function() {
                               _vm._l(60, function(n, minute) {
                                 return _c(
                                   "option",
-                                  { key: minute, domProps: { value: minute } },
+                                  {
+                                    key: minute,
+                                    attrs: { id: "minutes_" + minute },
+                                    domProps: { value: minute }
+                                  },
                                   [
                                     minute === 0 || minute === 1
                                       ? _c("p", [
@@ -78457,31 +78523,7 @@ var render = function() {
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "block-header bg-primary-dark" }, [
-      _c("h3", { staticClass: "block-title" }, [_vm._v("add_event")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "block-options" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn-block-option",
-            attrs: {
-              type: "button",
-              "data-dismiss": "modal",
-              "aria-label": "Close"
-            }
-          },
-          [_c("i", { staticClass: "fa fa-fw fa-times" })]
-        )
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -78551,6 +78593,7 @@ var render = function() {
                   _c("filtercomponent", { on: { eventFiltred: _vm.refresh } }),
                   _vm._v(" "),
                   _c("detailcomponent", {
+                    ref: "detail_event",
                     attrs: { user_id: _vm.user.id, EventId: _vm.EventId },
                     on: {
                       eventDeleted: _vm.getEvents,
@@ -78596,6 +78639,7 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("addEvent-component", {
+        ref: "add_event",
         attrs: { user_id: _vm.user.id, infoSelected: _vm.infoSelected },
         on: { evnetCreated: _vm.getEvents }
       }),
@@ -78654,232 +78698,63 @@ var render = function() {
               [
                 _vm._m(0),
                 _vm._v(" "),
-                _c("form", [
-                  _c("div", { staticClass: "block-content font-size-sm" }, [
-                    _c("div", { staticClass: "form-group" }, [
-                      _c("label", [_vm._v("title")]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.event.title,
-                            expression: "event.title"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", name: "title", required: "" },
-                        domProps: { value: _vm.event.title },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.event, "title", $event.target.value)
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group" }, [
-                      _c("label", [_vm._v("description")]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.event.description,
-                            expression: "event.description"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          type: "text",
-                          name: "description",
-                          required: ""
-                        },
-                        domProps: { value: _vm.event.description },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.event,
-                              "description",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group" }, [
-                      _c("label", [_vm._v("start")]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.start,
-                            expression: "start"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          type: "time",
-                          name: "start_time",
-                          id: "start_time_event",
-                          required: ""
-                        },
-                        domProps: { value: _vm.start },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.start = $event.target.value
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-6" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", [_vm._v("hours")]),
-                          _vm._v(" "),
-                          _c(
-                            "select",
-                            {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.hours,
-                                  expression: "hours"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: { required: "" },
-                              on: {
-                                change: function($event) {
-                                  var $$selectedVal = Array.prototype.filter
-                                    .call($event.target.options, function(o) {
-                                      return o.selected
-                                    })
-                                    .map(function(o) {
-                                      var val =
-                                        "_value" in o ? o._value : o.value
-                                      return val
-                                    })
-                                  _vm.hours = $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                }
-                              }
-                            },
-                            _vm._l(25, function(n, hour) {
-                              return _c(
-                                "option",
-                                { key: hour, domProps: { value: hour } },
-                                [
-                                  hour === 0 || hour === 1
-                                    ? _c("p", [_vm._v(_vm._s(hour) + " hour")])
-                                    : _c("p", [_vm._v(_vm._s(hour) + " hours")])
-                                ]
-                              )
-                            }),
-                            0
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-6" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", [_vm._v("minutes")]),
-                          _vm._v(" "),
-                          _c(
-                            "select",
-                            {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.minutes,
-                                  expression: "minutes"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: { required: "" },
-                              on: {
-                                change: function($event) {
-                                  var $$selectedVal = Array.prototype.filter
-                                    .call($event.target.options, function(o) {
-                                      return o.selected
-                                    })
-                                    .map(function(o) {
-                                      var val =
-                                        "_value" in o ? o._value : o.value
-                                      return val
-                                    })
-                                  _vm.minutes = $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                }
-                              }
-                            },
-                            _vm._l(60, function(n, minute) {
-                              return _c(
-                                "option",
-                                { key: minute, domProps: { value: minute } },
-                                [
-                                  minute === 0 || minute === 1
-                                    ? _c("p", [
-                                        _vm._v(
-                                          "\n                        " +
-                                            _vm._s(minute) +
-                                            " minute\n                      "
-                                        )
-                                      ])
-                                    : _c("p", [
-                                        _vm._v(_vm._s(minute) + " minutes")
-                                      ])
-                                ]
-                              )
-                            }),
-                            0
-                          )
-                        ])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group" }, [
-                      _c("label", [_vm._v("password")]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "input-group mb-3" }, [
+                _c(
+                  "form",
+                  {
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.update($event)
+                      }
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "block-content font-size-sm" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("title")]),
+                        _vm._v(" "),
                         _c("input", {
                           directives: [
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.event.password,
-                              expression: "event.password"
+                              value: _vm.event.title,
+                              expression: "event.title"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "text", name: "title", required: "" },
+                          domProps: { value: _vm.event.title },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.event, "title", $event.target.value)
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("description")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.event.description,
+                              expression: "event.description"
                             }
                           ],
                           staticClass: "form-control",
                           attrs: {
-                            id: "password-1",
-                            type: "password",
-                            "aria-label": "Recipient's username",
-                            maxlength: "10",
-                            "aria-describedby": "basic-addon2",
+                            type: "text",
+                            name: "description",
                             required: ""
                           },
-                          domProps: { value: _vm.event.password },
+                          domProps: { value: _vm.event.description },
                           on: {
                             input: function($event) {
                               if ($event.target.composing) {
@@ -78887,85 +78762,277 @@ var render = function() {
                               }
                               _vm.$set(
                                 _vm.event,
-                                "password",
+                                "description",
                                 $event.target.value
                               )
                             }
                           }
-                        }),
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("start")]),
                         _vm._v(" "),
-                        _c("div", { staticClass: "input-group-append" }, [
-                          _c(
-                            "button",
+                        _c("input", {
+                          directives: [
                             {
-                              staticClass: "btn btn-sm btn-outline-info",
-                              attrs: { type: "button" },
-                              on: { click: _vm.togglePassword }
-                            },
-                            [
-                              _vm._v(
-                                "\n                    Show\n                  "
-                              )
-                            ]
-                          )
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.start,
+                              expression: "start"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "time",
+                            name: "start_time",
+                            id: "start_time_event",
+                            required: ""
+                          },
+                          domProps: { value: _vm.start },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.start = $event.target.value
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-6" }, [
+                          _c("div", { staticClass: "form-group" }, [
+                            _c("label", [_vm._v("hours")]),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.hours,
+                                    expression: "hours"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: { required: "" },
+                                on: {
+                                  change: [
+                                    function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.hours = $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    },
+                                    _vm.changed
+                                  ]
+                                }
+                              },
+                              _vm._l(25, function(n, hour) {
+                                return _c(
+                                  "option",
+                                  { key: hour, domProps: { value: hour } },
+                                  [
+                                    hour === 0 || hour === 1
+                                      ? _c("p", [
+                                          _vm._v(_vm._s(hour) + " hour")
+                                        ])
+                                      : _c("p", [
+                                          _vm._v(_vm._s(hour) + " hours")
+                                        ])
+                                  ]
+                                )
+                              }),
+                              0
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-6" }, [
+                          _c("div", { staticClass: "form-group" }, [
+                            _c("label", [_vm._v("minutes")]),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.minutes,
+                                    expression: "minutes"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: { required: "", id: "minutes-0-0" },
+                                on: {
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.minutes = $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  }
+                                }
+                              },
+                              _vm._l(60, function(n, minute) {
+                                return _c(
+                                  "option",
+                                  {
+                                    key: minute,
+                                    attrs: { id: "minutes_0_" + minute },
+                                    domProps: { value: minute }
+                                  },
+                                  [
+                                    minute === 0 || minute === 1
+                                      ? _c("p", [
+                                          _vm._v(
+                                            "\n                        " +
+                                              _vm._s(minute) +
+                                              " minute\n                      "
+                                          )
+                                        ])
+                                      : _c("p", [
+                                          _vm._v(_vm._s(minute) + " minutes")
+                                        ])
+                                  ]
+                                )
+                              }),
+                              0
+                            )
+                          ])
                         ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("password")]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "input-group mb-3" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.event.password,
+                                expression: "event.password"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              id: "password-1",
+                              type: "password",
+                              "aria-label": "Recipient's username",
+                              maxlength: "10",
+                              "aria-describedby": "basic-addon2",
+                              required: ""
+                            },
+                            domProps: { value: _vm.event.password },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.event,
+                                  "password",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "input-group-append" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-sm btn-outline-info",
+                                attrs: { type: "button" },
+                                on: { click: _vm.togglePassword }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                    Show\n                  "
+                                )
+                              ]
+                            )
+                          ])
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("join Url")]),
+                        _vm._v(" "),
+                        _c("textarea", {
+                          staticClass: "form-control",
+                          attrs: {
+                            name: "join_url",
+                            rows: "4",
+                            cols: "50",
+                            readonly: ""
+                          },
+                          domProps: { value: _vm.event.join_url }
+                        })
                       ])
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "form-group" }, [
-                      _c("label", [_vm._v("join Url")]),
-                      _vm._v(" "),
-                      _c("textarea", {
-                        staticClass: "form-control",
-                        attrs: {
-                          name: "join_url",
-                          rows: "4",
-                          cols: "50",
-                          readonly: ""
-                        },
-                        domProps: { value: _vm.event.join_url }
-                      })
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "block-content block-content-full text-right border-top"
-                    },
-                    [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-sm btn-outline-secondary",
-                          attrs: { type: "button", "data-dismiss": "modal" }
-                        },
-                        [_vm._v("\n              close\n            ")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn  btn-sm btn-outline-danger",
-                          attrs: { type: "button" },
-                          on: { click: _vm.destroy }
-                        },
-                        [_vm._v("\n              delete\n            ")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn  btn-sm btn-outline-primary",
-                          attrs: { id: "detail_button", type: "button" },
-                          on: { click: _vm.update }
-                        },
-                        [_vm._v("\n              update\n            ")]
-                      )
-                    ]
-                  )
-                ])
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "block-content block-content-full text-right border-top"
+                      },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-sm btn-outline-secondary",
+                            attrs: { type: "button", "data-dismiss": "modal" }
+                          },
+                          [_vm._v("\n              close\n            ")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn  btn-sm btn-outline-danger",
+                            attrs: { type: "button" },
+                            on: { click: _vm.destroy }
+                          },
+                          [_vm._v("\n              delete\n            ")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn  btn-sm btn-outline-primary",
+                            attrs: { id: "detail_button", type: "submit" }
+                          },
+                          [_vm._v("\n              update\n            ")]
+                        )
+                      ]
+                    )
+                  ]
+                )
               ]
             )
           ])

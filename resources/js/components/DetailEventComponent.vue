@@ -24,7 +24,7 @@
               </button>
             </div>
           </div>
-          <form>
+          <form v-on:submit.prevent="update">
             <div class="block-content font-size-sm">
               <div class="form-group">
                 <label>title</label>
@@ -62,8 +62,8 @@
                   <div class="form-group">
                     <label>hours</label>
 
-                    <select class="form-control" v-model="hours" required>
-                      <option v-for="(n, hour) in 25" :key="hour" :value="hour">
+                    <select class="form-control" v-model="hours" required v-on:change="changed">
+                      <option v-for="(n, hour) in 25" :key="hour" :value="hour" >
                         <p v-if="hour === 0 || hour === 1">{{ hour }} hour</p>
                         <p v-else>{{ hour }} hours</p>
                       </option>
@@ -74,11 +74,12 @@
                   <div class="form-group">
                     <label>minutes</label>
 
-                    <select class="form-control" v-model="minutes" required>
+                    <select class="form-control" v-model="minutes" required id="minutes-0-0">
                       <option
                         v-for="(n, minute) in 60"
                         :key="minute"
                         :value="minute"
+                         :id="'minutes_0_'+minute"
                       >
                         <p v-if="minute === 0 || minute === 1">
                           {{ minute }} minute
@@ -137,7 +138,7 @@
               <button type="button" class="btn  btn-sm btn-outline-danger" @click="destroy">
                 delete
               </button>
-              <button id="detail_button" type="button" class="btn  btn-sm btn-outline-primary" @click="update">
+              <button id="detail_button" type="submit" class="btn  btn-sm btn-outline-primary" >
                 update
               </button>
             </div>
@@ -161,6 +162,21 @@ export default {
   },
   props: ["user_id", "EventId"],
   methods: {
+       changed(){
+        if(this.hours===24){
+            this.minutes=0;
+            $( "#minutes-0-0" ).prop( "disabled", true );
+            $( "#minutes_0_0" ).prop( "disabled", false );
+
+        }else if(this.hours===0){
+             $( "#minutes_0_0" ).prop( "disabled", true );
+             $( "#minutes-0-0" ).prop( "disabled", false );
+              this.minutes=1;
+        }else{
+         $( "#minutes-0-0" ).prop( "disabled", false );
+         $( "#minutes_0_0" ).prop( "disabled", false );
+        }
+    },
     destroy() {
       axios
         .post("api/event/destroy", {
@@ -182,6 +198,7 @@ export default {
         .get(`api/event/getEvent/${this.EventId}`)
         .then((response) => (this.event = response.data))
         .catch((error) => console.log(error));
+
     },
     togglePassword() {
       var x = document.getElementById("password-1");
@@ -224,6 +241,7 @@ export default {
       this.start = newValue.start.split(" ")[1];
       this.hours = parseInt(newValue.duration/60);
       this.minutes = parseInt(newValue.duration%60);
+      this.changed();
     },
   },
 };

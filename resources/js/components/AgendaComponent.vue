@@ -30,6 +30,7 @@
               :EventId="EventId"
               @eventDeleted="getEvents"
               @eventUpdate="getEvents"
+              ref="detail_event"
             />
           </h1>
         </div>
@@ -59,6 +60,7 @@
       @evnetCreated="getEvents"
       :user_id="user.id"
       :infoSelected="infoSelected"
+      ref="add_event"
     ></addEvent-component>
     <Fullcalendar
       :options="calendarOptions"
@@ -68,6 +70,7 @@
 </template>
 
 <script>
+
 import Fullcalendar from "@fullcalendar/vue";
 import DayGridPlugin from "@fullcalendar/daygrid";
 import TimeGridPlugin from "@fullcalendar/timegrid";
@@ -118,6 +121,7 @@ export default {
         eventClick: (eventClickInfo) => {
           this.EventId = eventClickInfo.event.id;
           document.getElementById("detail-button").click();
+        //   this.$refs.detail_event.changed();
         },
       },
     };

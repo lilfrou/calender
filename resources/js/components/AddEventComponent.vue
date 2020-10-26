@@ -6,6 +6,7 @@
     role="dialog"
     aria-labelledby="create"
     aria-hidden="true"
+    ref="createEvent"
   >
     <div class="modal-dialog modal-sm" role="document">
       <div class="modal-content">
@@ -19,6 +20,7 @@
                 class="btn-block-option"
                 data-dismiss="modal"
                 aria-label="Close"
+                @click="reset"
               >
                 <i class="fa fa-fw fa-times"></i>
               </button>
@@ -72,7 +74,7 @@
                   <div class="form-group">
                     <label>hours</label>
 
-                    <select class="form-control" v-model="hours" required>
+                    <select class="form-control" v-model="hours" required v-on:change="changed">
                       <option selected disabled>Select</option>
                       <option v-for="(n, hour) in 25" :key="hour" :value="hour">
                         <p v-if="hour === 0 || hour === 1">{{ hour }} hour</p>
@@ -88,14 +90,15 @@
                   <div class="form-group">
                     <label>minutes</label>
 
-                    <select class="form-control" v-model="minutes" required>
+                    <select class="form-control" v-model="minutes" required id="minutes-0">
                       <option selected disabled>Select</option>
                       <option
                         v-for="(n, minute) in 60"
                         :key="minute"
                         :value="minute"
+                        :id="'minutes_'+minute"
                       >
-                        <p v-if="minute === 0 || minute === 1">
+                        <p v-if="minute === 0 || minute === 1" >
                           {{ minute }} minute
                         </p>
                         <p v-else>{{ minute }} minutes</p>
@@ -160,6 +163,7 @@
   </div>
 </template>
 <script>
+
 export default {
   data() {
     return {
@@ -173,9 +177,11 @@ export default {
       type: "",
       password: "",
       msg: [],
+      validate: true
     };
   },
   props: ["user_id", "infoSelected"],
+
   methods: {
     reset() {
       this.title = "";
@@ -185,6 +191,23 @@ export default {
       this.end = "";
       this.type = "";
       this.password = "";
+      this.msg=[];
+      this.validate=false;
+    },
+    changed(){
+        if(this.hours===24){
+            this.minutes=0;
+            $( "#minutes-0" ).prop( "disabled", true );
+            $( "#minutes_0" ).prop( "disabled", false );
+
+        }else if(this.hours===0){
+             $( "#minutes-0" ).prop( "disabled", false );
+             $( "#minutes_0" ).prop( "disabled", true );
+              this.minutes=1;
+        }else{
+         $( "#minutes-0" ).prop( "disabled", false );
+         $( "#minutes_0" ).prop( "disabled", false );
+        }
     },
     togglePassword() {
       var x = document.getElementById("password-0");
@@ -320,42 +343,42 @@ export default {
       this.type = newValue.view.type;
     },
     title: function (newValue) {
-      if (newValue == "") {
+      if (newValue == "" && this.validate) {
         this.msg.push("title");
       } else if (this.msg.includes("title")) {
         this.msg.splice(this.msg.indexOf("title"), 1);
       }
     },
     description: function (newValue) {
-      if (newValue == "") {
+      if (newValue == "" && this.validate) {
         this.msg.push("description");
       } else if (this.msg.includes("description")) {
         this.msg.splice(this.msg.indexOf("description"), 1);
       }
     },
     start_time: function (newValue) {
-      if (newValue == "") {
+      if (newValue == "" && this.validate) {
         this.msg.push("start_time");
       } else if (this.msg.includes("start_time")) {
         this.msg.splice(this.msg.indexOf("start_time"), 1);
       }
     },
     hours: function (newValue) {
-      if (newValue == "") {
+      if (newValue == "Select" && this.validate) {
         this.msg.push("hours");
       } else if (this.msg.includes("hours")) {
         this.msg.splice(this.msg.indexOf("hours"), 1);
       }
     },
     minutes: function (newValue) {
-      if (newValue == "") {
+      if (newValue == "Select" && this.validate) {
         this.msg.push("minutes");
       } else if (this.msg.includes("minutes")) {
         this.msg.splice(this.msg.indexOf("minutes"), 1);
       }
     },
     password: function (newValue) {
-      if (newValue == "") {
+      if (newValue == "" && this.validate) {
         this.msg.push("password");
       } else if (this.msg.includes("password")) {
         this.msg.splice(this.msg.indexOf("password"), 1);
