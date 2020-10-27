@@ -24,7 +24,13 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
     <li><a href="https://zoom.us/pricing">please see the zoom billing :</a></li>
 </ul>
 <h3>Redis and laravel-echo-server</h3>
-- this project does need a seteup for redis and laravel-echo-server as mentioned , for seteup documentation please refere to this link :
+<ul>
+<li>this project does need a seteup for redis and laravel-echo-server as mentioned , for seteup documentation please refere to this link :</li>
+</ul>
+<h3>.Env File</h3>
+<ul>
+<li>this project does need the following env seteup , basicly for the redis server and for the zomm api that you can get after setting up your zomm App</li>
+</ul>
 
 
 ## Laravel Sponsor
