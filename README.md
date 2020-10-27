@@ -10,7 +10,7 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 - [Laravel 8](https://laravel.com/).
 
 ## Requirement
-- Zoom API
+<h3>Zoom API</h3>
 -  This project require one pro zoom account at least , the pro accout owner must be the master to allow all the zoom api to work.
   Other user are created under the master account us members , those user by default they will be assigned to a basic zoom meaning:
         - create meeting (with maximum duration of 40 minutes if the meeting is hosted by more then 3 people)
