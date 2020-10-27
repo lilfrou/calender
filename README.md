@@ -66,8 +66,26 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
     <li>Currently there are 2 type of user , 1 Admin who is the master account and multiple Operator , things can change later on the futur but will stick to those for the moment</li>
 </ul>
 <h3>Admin</h3>
+<ul>
+    <li>At first time login Admin have to link his master zoom account</li>
+    <li>clicking on the link account button will redirect you to zoom page to login with your master account</li>
+    <li>if it is the first time installing the zoom app Admin have to accept all the App scopes </li>
+    <li>if accepted the Admin will be redirected to the dashboard page</li>
+
+
+</ul>
 <h3>Operator</h3>
 
+<ul>
+    <li>Operator side is a little bit different , an Operator needs to create a sub account under the Admin zoom account , the steps are the following :</li>
+    <li>At first time login Operator have to get his sub zoom account</li>
+    <li>A Confirm email will be send to the Operator to complete his account setup</li>
+    <li>Operator can complete his register by facebook or gamil or with password</li>
+    <li>after completing the zoom registration the project email blade will redirect it self to log in with you zoom account</li>
+    <li>after accepting the scopes operator will be redirect to dashboard page</li>
 
+
+
+</ul>
 
 
