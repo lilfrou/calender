@@ -21,8 +21,7 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
                                         <li>join meeting</li>
 </ol>
 <li>for illimited meeting duration members users need to change from basic to pro account at least like the master . </li>
-<li>please see the zoom billing :</li>
-<li>[Zoom billing] (https://zoom.us/pricing)</li>
+    <li><a href="https://zoom.us/pricing">please see the zoom billing :</a></li>
 </ul>
 
 
