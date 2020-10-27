@@ -10,6 +10,8 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 - [Laravel 8](https://laravel.com/).
 
 ## Requirement
+- [Vue js].
+
 
 
 ## Laravel Sponsor
