@@ -28,8 +28,10 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 <li>this project does need a seteup for redis and laravel-echo-server as mentioned , for seteup documentation please refere to this link :</li>
 </ul>
 <h3>.Env File</h3>
+<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/1.png" width="800"></p>
+
 <ul>
-<li>this project does need the following env seteup , basicly for the redis server and for the zomm api that you can get after setting up your zomm App</li>
+<li>this project does need the following env seteup , basicly for the redis server and for the zoom api that you will get after setting up your zoom App</li>
 </ul>
 
 
