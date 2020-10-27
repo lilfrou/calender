@@ -1,4 +1,4 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/1.png" width="800"></a></p>
+<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/1.png" width="800"></p>
 
 ## About Laravel
 
