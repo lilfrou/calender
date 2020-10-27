@@ -37,7 +37,7 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 
 ## Seteup Section 
 <h3>Creating an Oauth for our zoom App</h3>
-<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/2.png" width="800"></p>
+<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/3.png" width="400"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/4.png" width="400"></p>
 
 <ul>
     <li>Now there are 2 type for OAuth App , one called Account level app where only admin can install the app and he will be manage the meeting for other users , the second one is user-managed-app each user can install the app and  manage his own meeting and it is the app type that we are using </li>
