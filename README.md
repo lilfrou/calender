@@ -58,6 +58,8 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 </ul>
 <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/8.png" width="500"></p>
 <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/9.png" width="500"></p>
-
+<ul>
+    <li>Now we can add some more feature later on , for that check official site</li>
+</ul>
 
 
