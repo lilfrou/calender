@@ -89,14 +89,14 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 <h3>Create ,Update , Delete meeting</h3>
     <ul>
     <li>Now for creating and updating the rules are simple , fill in the blank , there are a few condition that are applyed to the duration , user can not send a 0 hours and 0 minutes at the same time  ,and if the hours is 24 the minutes will be disabled</li>
-<li> When a meeting is created an invitation will be generated , you can copy the invitation and send it to any one </li>
+<li> When a meeting is created an invitation will be generated , you can copy the invitation and send it to any one <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/created.png" width="400"></p>
+ </li>
 <li>User can find the invitation link and password while clicking on an event</li>
-<li>if an error some how occured a warning notification will be shown </li>
+<li>if an error some how occured a warning notification will be shown <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/error.png" width="200"></p>
+</li>
 </ul>
-<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/created.png" width="400"></p>
-<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/updated.png" width="400"></p>
-<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/deleted.png" width="400"></p>
-<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/error.png" width="400"></p>
+<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/updated.png" width="200"></p>
+<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/deleted.png" width="200"></p>
 
 
 
