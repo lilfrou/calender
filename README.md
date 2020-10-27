@@ -1,20 +1,16 @@
 <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/1.png" width="800"></p>
 
 ## General information
-this project was created using Vue js , Zoom API , Full Calendar API with Laravel 8 :
+this project was created using Vue js,sweet alert , Zoom API , Full Calendar API with Laravel 8 :
 
 - [Vue js](https://vuejs.org/).
+- [Sweet Alert](https://sweetalert2.github.io/).
 - [Zoom API](https://marketplace.zoom.us/docs/guides).
 - [Full Calendar API](https://fullcalendar.io/).
 - [Laravel 8](https://laravel.com/).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Requirement
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
 ## Laravel Sponsor
 
