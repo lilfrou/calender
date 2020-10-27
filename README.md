@@ -61,7 +61,7 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 <ul>
     <li>Now we can add some more feature later on , for that check official site ! https://fullcalendar.io/</li>
 </ul>
-## Setup Section 
+<h2>Setup Section</h2>
 <ul>
     <li>Currently there are 2 type of user , Admin and Operator , things can change later on the futur but will stick to those for the moment</li>
 </ul>
