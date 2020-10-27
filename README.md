@@ -49,7 +49,7 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 <h3>Full Calendar</h3>
 <ul>
     <li>now full calendar is the Api responsable for generating the calendar in the view side it uses vue js us third party , the setup require  npm to install full calendar with mentioning each required plugin , after that we need to import those plugin in the view component</li>
-    <ul>Run this command: npm install --save @fullcalendar/vue @fullcalendar/daygrid @fullcalendar/timegrid @fullcalendar/interaction @fullcalendar/list</ul>
+    <li>Run this command: npm install --save @fullcalendar/vue @fullcalendar/daygrid @fullcalendar/timegrid @fullcalendar/interaction @fullcalendar/list</li>
 </ul>
 <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/7.png" width="1000"></p>
 
