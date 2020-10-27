@@ -93,6 +93,12 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 <li>User can find the invitation link and password while clicking on an event</li>
 <li>if an error some how occured a warning notification will be shown </li>
 </ul>
+<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/create.png" width="400"></p>
+<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/update.png" width="1000"></p>
+<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/delete.png" width="1000"></p>
+<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/error.png" width="1000"></p>
+
+
 
 
 
