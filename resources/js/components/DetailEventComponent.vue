@@ -62,8 +62,13 @@
                   <div class="form-group">
                     <label>hours</label>
 
-                    <select class="form-control" v-model="hours" required v-on:change="changed">
-                      <option v-for="(n, hour) in 25" :key="hour" :value="hour" >
+                    <select
+                      class="form-control"
+                      v-model="hours"
+                      required
+                      v-on:change="changed"
+                    >
+                      <option v-for="(n, hour) in 25" :key="hour" :value="hour">
                         <p v-if="hour === 0 || hour === 1">{{ hour }} hour</p>
                         <p v-else>{{ hour }} hours</p>
                       </option>
@@ -74,12 +79,17 @@
                   <div class="form-group">
                     <label>minutes</label>
 
-                    <select class="form-control" v-model="minutes" required id="minutes-0-0">
+                    <select
+                      class="form-control"
+                      v-model="minutes"
+                      required
+                      id="minutes-0-0"
+                    >
                       <option
                         v-for="(n, minute) in 60"
                         :key="minute"
                         :value="minute"
-                         :id="'minutes_0_'+minute"
+                        :id="'minutes_0_' + minute"
                       >
                         <p v-if="minute === 0 || minute === 1">
                           {{ minute }} minute
@@ -135,10 +145,19 @@
               >
                 close
               </button>
-              <button type="button" class="btn  btn-sm btn-outline-danger" @click="destroy">
+              <button
+                id="delete_button"
+                type="button"
+                class="btn btn-sm btn-outline-danger"
+                @click="destroy"
+              >
                 delete
               </button>
-              <button id="detail_button" type="submit" class="btn  btn-sm btn-outline-primary" >
+              <button
+                id="detail_button"
+                type="submit"
+                class="btn btn-sm btn-outline-primary"
+              >
                 update
               </button>
             </div>
@@ -156,49 +175,67 @@ export default {
       event: {},
       start: "",
       end: "",
-      hours:"",
-      minutes:""
+      hours: "",
+      minutes: "",
     };
   },
   props: ["user_id", "EventId"],
   methods: {
-       changed(){
-        if(this.hours===24){
-            this.minutes=0;
-            $( "#minutes-0-0" ).prop( "disabled", true );
-            $( "#minutes_0_0" ).prop( "disabled", false );
-
-        }else if(this.hours===0){
-             $( "#minutes_0_0" ).prop( "disabled", true );
-             $( "#minutes-0-0" ).prop( "disabled", false );
-              this.minutes=1;
-        }else{
-         $( "#minutes-0-0" ).prop( "disabled", false );
-         $( "#minutes_0_0" ).prop( "disabled", false );
-        }
+    changed() {
+      if (this.hours === 24) {
+        this.minutes = 0;
+        $("#minutes-0-0").prop("disabled", true);
+        $("#minutes_0_0").prop("disabled", false);
+      } else if (this.hours === 0) {
+        $("#minutes_0_0").prop("disabled", true);
+        $("#minutes-0-0").prop("disabled", false);
+        this.minutes = 1;
+      } else {
+        $("#minutes-0-0").prop("disabled", false);
+        $("#minutes_0_0").prop("disabled", false);
+      }
     },
     destroy() {
+      $("#delete_button")
+        .html(
+          '<span id="span_delete" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...'
+        )
+        .attr("disabled", true);
+      const Toast = this.$swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", this.$swal.stopTimer);
+          toast.addEventListener("mouseleave", this.$swal.resumeTimer);
+        },
+      });
       axios
+
         .post("api/event/destroy", {
           event_id: this.EventId,
           user_id: this.user_id,
         })
         .then(
           (response) => this.$emit("eventDeleted", response),
-          $("#detailEvent").modal("hide"),
-          this.$swal({
-            title: "meeting deleted",
-            icon: "success",
-          })
         )
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          Toast.fire({
+            icon: "error",
+            title: "Something went wrong!",
+          }),
+            console.log(error),
+            $("#span_delete").remove();
+          $("#delete_button").html("delete").attr("disabled", false);
+        });
     },
     getEvent() {
       axios
         .get(`api/event/getEvent/${this.EventId}`)
         .then((response) => (this.event = response.data))
         .catch((error) => console.log(error));
-
     },
     togglePassword() {
       var x = document.getElementById("password-1");
@@ -209,15 +246,29 @@ export default {
       }
     },
     update() {
- $('#detail_button').html('<span id="span_detail" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').attr("disabled", true);
-
+      $("#detail_button")
+        .html(
+          '<span id="span_detail" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...'
+        )
+        .attr("disabled", true);
+      const Toast = this.$swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", this.$swal.stopTimer);
+          toast.addEventListener("mouseleave", this.$swal.resumeTimer);
+        },
+      });
       this.start = this.event.start.split(" ", 1)[0] + "T" + this.start;
-    //   this.end = this.event.end.split(" ", 1)[0] + "T" + this.end;
+      //   this.end = this.event.end.split(" ", 1)[0] + "T" + this.end;
 
       axios
         .post("api/event/update", {
           id: this.EventId,
-        //   user_id: this.event.user_id,
+          //   user_id: this.event.user_id,
           user_id: this.user_id,
           start: this.start,
           duration: this.hours * 60 + this.minutes,
@@ -225,10 +276,16 @@ export default {
           description: this.event.description,
           password: this.event.password,
         })
-        .then(
-          (response) => this.$emit("eventUpdate", response),
-        )
-        .catch((error) => console.log(error));
+        .then((response) => this.$emit("eventUpdate", response))
+        .catch((error) => {
+          Toast.fire({
+            icon: "error",
+            title: "Something went wrong!",
+          }),
+            console.log(error),
+             $("#span_detail").remove();
+          $("#detail_button").html("update").attr("disabled", false);
+        });
     },
   },
   watch: {
@@ -239,8 +296,8 @@ export default {
     },
     event: function (newValue) {
       this.start = newValue.start.split(" ")[1];
-      this.hours = parseInt(newValue.duration/60);
-      this.minutes = parseInt(newValue.duration%60);
+      this.hours = parseInt(newValue.duration / 60);
+      this.minutes = parseInt(newValue.duration % 60);
       this.changed();
     },
   },

@@ -208,6 +208,17 @@ export default {
       //   } else {
       //     return;
       //   }
+       const Toast = this.$swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", this.$swal.stopTimer);
+          toast.addEventListener("mouseleave", this.$swal.resumeTimer);
+        },
+      });
       $("#create_button")
         .html(
           '<span id="span_create" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...'
@@ -228,7 +239,15 @@ export default {
             this.$emit("evnetCreated", response), console.log(response.data)
           )
         )
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          Toast.fire({
+            icon: "error",
+            title: "Something went wrong!",
+          }),
+            console.log(error),
+             $("#span_create").remove();
+          $("#create_button").html("create").attr("disabled", false);
+        })
         .finally(() => this.reset());
     },
   },

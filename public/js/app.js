@@ -19678,6 +19678,17 @@ __webpack_require__.r(__webpack_exports__);
       //   } else {
       //     return;
       //   }
+      var Toast = this.$swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: function didOpen(toast) {
+          toast.addEventListener("mouseenter", _this.$swal.stopTimer);
+          toast.addEventListener("mouseleave", _this.$swal.resumeTimer);
+        }
+      });
       $("#create_button").html('<span id="span_create" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').attr("disabled", true);
       axios.post("api/event/createmeeting", {
         user_id: this.user_id,
@@ -19690,7 +19701,11 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         return _this.$emit("evnetCreated", response), console.log(response.data);
       })["catch"](function (error) {
-        return console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "Something went wrong!"
+        }), console.log(error), $("#span_create").remove();
+        $("#create_button").html("create").attr("disabled", false);
       })["finally"](function () {
         return _this.reset();
       });
@@ -19858,53 +19873,62 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this2 = this;
 
+    var Toast = this.$swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      didOpen: function didOpen(toast) {
+        toast.addEventListener("mouseenter", _this2.$swal.stopTimer);
+        toast.addEventListener("mouseleave", _this2.$swal.resumeTimer);
+      }
+    });
     window.Echo.channel("meeting.".concat(this.user.id)).listen(".meeting-event", function (e) {
-      $("#span_" + e.type).remove();
-      $("#" + e.type + "_button").html(e.type === 'detail' ? 'update' : e.type).attr("disabled", false);
-      $("#" + e.type + "Event").modal("hide");
-
-      var Toast = _this2.$swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 2000,
-        timerProgressBar: true,
-        didOpen: function didOpen(toast) {
-          toast.addEventListener("mouseenter", _this2.$swal.stopTimer);
-          toast.addEventListener("mouseleave", _this2.$swal.resumeTimer);
-        }
-      });
-
-      if (e.type === 'detail') {
+      if (e.type === "delete") {
+        $("#span_" + e.type).remove();
+        $("#" + e.type + "_button").html("delete").attr("disabled", false);
+        $("#detailEvent").modal("hide");
         Toast.fire({
           icon: "success",
-          title: "meeting updated"
+          title: "meeting deleted"
         });
       } else {
-        var lines = [e.meeting.host_email + ' is inviting you to a scheduled Zoom meeting.', 'topic: ' + e.meeting.topic + '.', 'Time: ' + e.meeting.start_time + '.', 'Join Zoom Meeting .', e.meeting.join_url + ' .', 'Passcode :' + e.meeting.password];
+        $("#span_" + e.type).remove();
+        $("#" + e.type + "_button").html(e.type === "detail" ? "update" : e.type).attr("disabled", false);
+        $("#" + e.type + "Event").modal("hide");
 
-        _this2.$swal({
-          title: "meeting created",
-          text: lines.join('\n\n'),
-          confirmButtonText: "Copy invitation",
-          icon: "success",
-          preConfirm: function preConfirm() {
-            return new Promise(function (resolve) {
-              if (true) {
-                var el = document.getElementById("swal2-content").textContent;
-                resolve([navigator.clipboard.writeText(el).then(function () {
-                  console.log("Async: Copying to clipboard was successful!");
-                  Toast.fire({
-                    icon: "success",
-                    title: "Copied"
-                  });
-                }, function (err) {
-                  console.error("Async: Could not copy text: ", err);
-                })]);
-              }
-            });
-          }
-        });
+        if (e.type === "detail") {
+          Toast.fire({
+            icon: "success",
+            title: "meeting updated"
+          });
+        } else {
+          var lines = [e.meeting.host_email + " is inviting you to a scheduled Zoom meeting.", "topic: " + e.meeting.topic + ".", "Time: " + e.meeting.start_time + ".", "Join Zoom Meeting .", e.meeting.join_url + " .", "Passcode :" + e.meeting.password];
+
+          _this2.$swal({
+            title: "meeting created",
+            text: lines.join("\n\n"),
+            confirmButtonText: "Copy invitation",
+            icon: "success",
+            preConfirm: function preConfirm() {
+              return new Promise(function (resolve) {
+                if (true) {
+                  var el = document.getElementById("swal2-content").textContent;
+                  resolve([navigator.clipboard.writeText(el).then(function () {
+                    console.log("Async: Copying to clipboard was successful!");
+                    Toast.fire({
+                      icon: "success",
+                      title: "Copied"
+                    });
+                  }, function (err) {
+                    console.error("Async: Could not copy text: ", err);
+                  })]);
+                }
+              });
+            }
+          });
+        }
       }
     });
   },
@@ -20091,6 +20115,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -20120,16 +20163,29 @@ __webpack_require__.r(__webpack_exports__);
     destroy: function destroy() {
       var _this = this;
 
+      $("#delete_button").html('<span id="span_delete" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').attr("disabled", true);
+      var Toast = this.$swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: function didOpen(toast) {
+          toast.addEventListener("mouseenter", _this.$swal.stopTimer);
+          toast.addEventListener("mouseleave", _this.$swal.resumeTimer);
+        }
+      });
       axios.post("api/event/destroy", {
         event_id: this.EventId,
         user_id: this.user_id
       }).then(function (response) {
         return _this.$emit("eventDeleted", response);
-      }, $("#detailEvent").modal("hide"), this.$swal({
-        title: "meeting deleted",
-        icon: "success"
-      }))["catch"](function (error) {
-        return console.log(error);
+      })["catch"](function (error) {
+        Toast.fire({
+          icon: "error",
+          title: "Something went wrong!"
+        }), console.log(error), $("#span_delete").remove();
+        $("#delete_button").html("delete").attr("disabled", false);
       });
     },
     getEvent: function getEvent() {
@@ -20153,7 +20209,18 @@ __webpack_require__.r(__webpack_exports__);
     update: function update() {
       var _this3 = this;
 
-      $('#detail_button').html('<span id="span_detail" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').attr("disabled", true);
+      $("#detail_button").html('<span id="span_detail" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').attr("disabled", true);
+      var Toast = this.$swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: function didOpen(toast) {
+          toast.addEventListener("mouseenter", _this3.$swal.stopTimer);
+          toast.addEventListener("mouseleave", _this3.$swal.resumeTimer);
+        }
+      });
       this.start = this.event.start.split(" ", 1)[0] + "T" + this.start; //   this.end = this.event.end.split(" ", 1)[0] + "T" + this.end;
 
       axios.post("api/event/update", {
@@ -20168,7 +20235,11 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         return _this3.$emit("eventUpdate", response);
       })["catch"](function (error) {
-        return console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "Something went wrong!"
+        }), console.log(error), $("#span_detail").remove();
+        $("#detail_button").html("update").attr("disabled", false);
       });
     }
   },
@@ -78844,8 +78915,8 @@ var render = function() {
                         _c(
                           "button",
                           {
-                            staticClass: "btn  btn-sm btn-outline-danger",
-                            attrs: { type: "button" },
+                            staticClass: "btn btn-sm btn-outline-danger",
+                            attrs: { id: "delete_button", type: "button" },
                             on: { click: _vm.destroy }
                           },
                           [_vm._v("\n              delete\n            ")]
@@ -78854,7 +78925,7 @@ var render = function() {
                         _c(
                           "button",
                           {
-                            staticClass: "btn  btn-sm btn-outline-primary",
+                            staticClass: "btn btn-sm btn-outline-primary",
                             attrs: { id: "detail_button", type: "submit" }
                           },
                           [_vm._v("\n              update\n            ")]

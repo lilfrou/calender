@@ -26,7 +26,7 @@
             </div>
             <filtercomponent @eventFiltred="refresh"></filtercomponent>
             <detailcomponent
-            :user_id="user.id"
+              :user_id="user.id"
               :EventId="EventId"
               @eventDeleted="getEvents"
               @eventUpdate="getEvents"
@@ -70,7 +70,6 @@
 </template>
 
 <script>
-
 import Fullcalendar from "@fullcalendar/vue";
 import DayGridPlugin from "@fullcalendar/daygrid";
 import TimeGridPlugin from "@fullcalendar/timegrid";
@@ -110,7 +109,7 @@ export default {
         handleWindowResize: true,
         windowResizeDelay: 0,
 
-        displayEventEnd:true,
+        displayEventEnd: true,
 
         // editable:true,
         events: {},
@@ -121,68 +120,90 @@ export default {
         eventClick: (eventClickInfo) => {
           this.EventId = eventClickInfo.event.id;
           document.getElementById("detail-button").click();
-        //   this.$refs.detail_event.changed();
+          //   this.$refs.detail_event.changed();
         },
       },
     };
   },
   mounted() {
+    const Toast = this.$swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener("mouseenter", this.$swal.stopTimer);
+        toast.addEventListener("mouseleave", this.$swal.resumeTimer);
+      },
+    });
     window.Echo.channel(`meeting.${this.user.id}`).listen(
       ".meeting-event",
       (e) => {
-        $("#span_"+e.type).remove();
-        $("#"+e.type+"_button").html(e.type==='detail'? 'update':e.type).attr("disabled", false);
-        $("#"+e.type+"Event").modal("hide");
+        if (e.type === "delete") {
+          $("#span_" + e.type).remove();
+          $("#" + e.type + "_button")
+            .html("delete")
+            .attr("disabled", false);
+          $("#detailEvent").modal("hide");
+          Toast.fire({
+            icon: "success",
+            title: "meeting deleted",
+          });
+        } else {
+          $("#span_" + e.type).remove();
+          $("#" + e.type + "_button")
+            .html(e.type === "detail" ? "update" : e.type)
+            .attr("disabled", false);
+          $("#" + e.type + "Event").modal("hide");
 
-        const Toast = this.$swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener("mouseenter", this.$swal.stopTimer);
-            toast.addEventListener("mouseleave", this.$swal.resumeTimer);
-          },
-        });
-         if(e.type==='detail'){
-              Toast.fire({
-                        icon: "success",
-                        title: "meeting updated",
-                      });
-
-        }else{
-        const lines = [e.meeting.host_email+' is inviting you to a scheduled Zoom meeting.','topic: '+e.meeting.topic+'.','Time: '+e.meeting.start_time+'.','Join Zoom Meeting .',e.meeting.join_url+' .','Passcode :'+e.meeting.password];
-        this.$swal({
-          title: "meeting created",
-          text: lines.join('\n\n'),
-          confirmButtonText: "Copy invitation",
-          icon: "success",
-          preConfirm: function () {
-            return new Promise(function (resolve) {
-              if (true) {
-                var el = document.getElementById("swal2-content").textContent;
-                resolve([
-                  navigator.clipboard.writeText(el).then(
-                    function () {
-                      console.log(
-                        "Async: Copying to clipboard was successful!"
-                      );
-                      Toast.fire({
-                        icon: "success",
-                        title: "Copied",
-                      });
-                    },
-                    function (err) {
-                      console.error("Async: Could not copy text: ", err);
-                    }
-                  ),
-                ]);
-              }
+          if (e.type === "detail") {
+            Toast.fire({
+              icon: "success",
+              title: "meeting updated",
             });
-          },
-        });
-      }
+          } else {
+            const lines = [
+              e.meeting.host_email +
+                " is inviting you to a scheduled Zoom meeting.",
+              "topic: " + e.meeting.topic + ".",
+              "Time: " + e.meeting.start_time + ".",
+              "Join Zoom Meeting .",
+              e.meeting.join_url + " .",
+              "Passcode :" + e.meeting.password,
+            ];
+            this.$swal({
+              title: "meeting created",
+              text: lines.join("\n\n"),
+              confirmButtonText: "Copy invitation",
+              icon: "success",
+              preConfirm: function () {
+                return new Promise(function (resolve) {
+                  if (true) {
+                    var el = document.getElementById("swal2-content")
+                      .textContent;
+                    resolve([
+                      navigator.clipboard.writeText(el).then(
+                        function () {
+                          console.log(
+                            "Async: Copying to clipboard was successful!"
+                          );
+                          Toast.fire({
+                            icon: "success",
+                            title: "Copied",
+                          });
+                        },
+                        function (err) {
+                          console.error("Async: Could not copy text: ", err);
+                        }
+                      ),
+                    ]);
+                  }
+                });
+              },
+            });
+          }
+        }
       }
     );
   },

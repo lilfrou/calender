@@ -123,6 +123,7 @@ class EventController extends Controller
                 ],
             ]);
             $event = $this->event->where('id', request('event_id'))->delete();
+            broadcast(new MeetingCreatedEvent(null,request('user_id'),'delete'));
             return 200;
         } catch (Exception $e) {
             if (401 == $e->getCode()) {
