@@ -85,9 +85,15 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
     <li>Operator can complete his register by facebook or gamil or with password</li>
     <li>after completing the zoom registration the project email blade will redirect it self to log in with you zoom account <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/16.png" width="400"></p></li>
     <li>after accepting the scopes operator will be redirect to dashboard page <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/14.png" width="400"></p></li>
-
-
-
 </ul>
+<h3>Create ,Update , Delete meeting</h3>
+    <ul>
+    <li>Now for creating and updating the rules are simple , fill in the blank , there are a few condition that are applyed to the duration , user can not send a 0 hours and 0 minutes at the same time  ,and if the hours is 24 the minutes will be disabled</li>
+<li> When a meeting is created an invitation will be generated , you can copy the invitation and send it to any one </li>
+<li>User can find the invitation link and password while clicking on an event</li>
+<li>if an error some how occured a warning notification will be shown </li>
+</ul>
+
+
 
 
