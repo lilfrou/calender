@@ -31,7 +31,7 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/2.png" width="800"></p>
 
 <ul>
-<li>this project does need the following env seteup , basicly for the redis server and for the zoom api that you will get after setting up your zoom App</li>
+<li>this project does need the following env seteup , basicly for the redis server and for the zoom api that you will get after setting up your zoom App( i will explain how to get those in the seteup section)</li>
 </ul>
 
 
