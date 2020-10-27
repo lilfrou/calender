@@ -81,8 +81,9 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
     <li>Operator side is a little bit different , an Operator needs to create a sub account under the Admin zoom account , the steps are the following :</li>
     <li>At first time login Operator have to get his sub zoom account <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/11.png" width="400"></p></li>
     <li>A Confirm email will be send to the Operator to complete his account setup <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/13.png" width="400"></p></li>
-    <li>Operator can complete his register by facebook or gamil or with password <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/16.png" width="400"></p></li>
-    <li>after completing the zoom registration the project email blade will redirect it self to log in with you zoom account <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/12.png" width="400"></p></li>
+<li>Mean while the Operator will be redirect email stand by page <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/12.png" width="400"></p></li>
+    <li>Operator can complete his register by facebook or gamil or with password <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/18.png" width="400"></p></li>
+    <li>after completing the zoom registration the project email blade will redirect it self to log in with you zoom account <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/13.png" width="400"></p></li>
     <li>after accepting the scopes operator will be redirect to dashboard page <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/14.png" width="400"></p></li>
 
 
