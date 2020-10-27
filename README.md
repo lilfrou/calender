@@ -15,10 +15,10 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 <li>This project require one pro zoom account at least , the pro accout owner must be the master to allow all the zoom api to work.</li>
 <li>Other user are created under the master account us members , those user by default they will be assigned to a basic zoom meaning:</li>
 <ol>
-       <li>create meeting (with maximum duration of 40 minutes if the meeting is hosted by more then 3 people)</li>
-       <li>update meeting</li>
-       <li>delete meeting</li>
-       <li>join meeting</li>
+                                        <li>create meeting (with maximum duration of 40 minutes if the meeting is hosted by more then 3 people)</li>
+                                        <li>update meeting</li>
+                                        <li>delete meeting</li>
+                                        <li>join meeting</li>
 </ol>
 <li>for illimited meeting duration members users need to change from basic to pro account at least like the master . </li>
 <li>please see the zoom billing :</li>
