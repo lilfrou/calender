@@ -37,12 +37,12 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 
 ## Seteup Section 
 <h3>Creating an Oauth for our zoom App</h3>
-<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/3.png" width="400"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/4.png" width="400"></p>
+<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/3.png" width="500"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/4.png" width="500"></p>
 
 <ul>
     <li>Now there are 2 type for OAuth App , one called Account level app where only admin can install the app and he will be manage the meeting for other users , the second one is user-managed-app each user can install the app and  manage his own meeting and it is the app type that we are using </li>
     <li><a href="https://marketplace.zoom.us/develop/create">link for creation</a></li>
-<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/5.png" width="400"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/6.png" width="400"></p>
+<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/5.png" width="500"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/6.png" width="500"></p>
     <li>we are turning our attention to scopes , scopes are the rules that define our App functionality , our focus is viewing the user information and meeting Api , there for those scopes will be selected , we can add other scopes later on</li>
     <li>remmember the env file setup ? we get those credentional when we create our APP , the cliend id and client secret is to identify our app , the important thing is the redirect url , that url must be defined in our routes project and it will redirect to if a zoom member has installer our APP </li>
 
