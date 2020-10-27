@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/1.png" width="800"></p>
+<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/0.png" width="800"></p>
 
 ## General information
 this project was created using Vue js,sweet alert , Zoom API , Full Calendar API with Laravel 8 :
