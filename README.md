@@ -69,7 +69,7 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 <ul>
     <li>At first time login Admin have to link his master zoom account <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/10.png" width="400"></p>
 </li>
-    <li>clicking on the link account button will redirect you to zoom page to login with your master account <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/15.png" width="400"></p></li>
+    <li>clicking on the link account button will redirect you to zoom page to login with your master account <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/16.png" width="400"></p></li>
     <li>if it is the first time installing the zoom app Admin have to accept all the App scopes <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/14.png" width="400"></p> </li>
     <li>if accepted the Admin will be redirected to the dashboard page</li>
 
