@@ -25,7 +25,7 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 </ul>
 <h3>Redis and laravel-echo-server</h3>
 <ul>
-<li>this project does need a setup for redis and laravel-echo-server as mentioned , for setup documentation please refere to this link :</li>
+<li>this project does need a setup for redis and laravel-echo-server as mentioned , for setup documentation please refere to this link  : https://github.com/iteainc/crn-dashboard/tree/redis</li>
 </ul>
 <h3>.Env File</h3>
 <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/2.png" width="800"></p>
@@ -97,6 +97,14 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 </ul>
 <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/updated.png" width="200"></p>
 <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/deleted.png" width="200"></p>
+<h2>Developer Guide</h2>
+<ul>
+    <li>Now there are a few things to keep in mind , first at all we need to understand the way zoom API works : <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/the_way.png" width="400"></p> </li>
+    <li>when user is installing the app for the first while accepting the scopes , he is actually sending an Authorization request, if installed the authorization will be granted and he will get an acces token stored in our tokens tabel , that token is used by each Api to get any ressource from the server , this operation is represeted inside EventController by the get token function and get code function <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/get_code.png" width="400"></p>  </li>
+<li> Each of update , create , delete function does excist in the same controller , now a user token is valid for 1 hour , for that case each of those methods are linked with refresh token api to get the new token <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/try_catch.png" width="400"></p> <li>
+    <li>there are a few other things to mention , the email verification blade is using an auto refresh function , by that it is using a zomm api to check if the user has confirmed his mail , the function does excist in the homeController </li>
+
+</ul>
 
 
 
