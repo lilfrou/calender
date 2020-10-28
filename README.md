@@ -23,12 +23,8 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 <li>for illimited meeting duration members users need to change from basic to pro account at least like the master . </li>
     <li><a href="https://zoom.us/pricing">please see the zoom billing :</a></li>
 </ul>
-<h3>Redis and laravel-echo-server</h3>
-<ul>
-<li>this project does need a setup for redis and laravel-echo-server as mentioned , for setup documentation please refere to this link  : https://github.com/iteainc/crn-dashboard/tree/redis</li>
-</ul>
 <h3>.Env File</h3>
-<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/2.png" width="800"></p>
+<p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/env.png" width="800"></p>
 
 <ul>
 <li>this project does need the following env setup , basicly for the redis server and for the zoom api that you will get after setting up your zoom App( i will explain how to get those in the setup section)</li>
@@ -97,6 +93,9 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 </ul>
 <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/updated.png" width="200"></p>
 <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/deleted.png" width="200"></p>
+<ul>
+    <li> user can drag and drop event  by clicking on an event and draging it into a new date , the event will be updated <img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/drag.png" width="600"></p> </li>
+</ul>
 <h2>Developer Guide</h2>
 <ul>
     <li>Now there are a few things to keep in mind , first at all we need to understand the way zoom API works : <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/the_way.png" width="800"></p> </li>
