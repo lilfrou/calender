@@ -94,7 +94,7 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
 <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/updated.png" width="200"></p>
 <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/deleted.png" width="200"></p>
 <ul>
-    <li> user can drag and drop event  by clicking on an event and draging it into a new date , the event will be updated <img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/drag.png" width="600"></p> </li>
+    <li> user can drag and drop event  by clicking on an event and draging it into a new date , the event will be updated <img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/darg.png" width="600"></p> </li>
 </ul>
 <h2>Developer Guide</h2>
 <ul>
@@ -104,6 +104,7 @@ this project was created using Vue js,sweet alert , Zoom API , Full Calendar API
     <li>there are a few other things to mention , the email verification blade is using an auto refresh function , by that it is using a zomm api to check if the user has confirmed his mail , the function does excist in the homeController   <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/refresh.png" width="800"></p> </li>
     <li> the auto refresh function is pointing to the HomeController index function where it checks for all condition to redirect the user to dashboard page  <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/dashboard.png" width="800"></p></li>
     <li> this function is responsable for checking the email confirmation   <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/email.png" width="800"></p></li>
+    <li>every callendar event has a callback function , clicking on an event , draging , clicking on an empty date to create an event , those call back funtion are the one responsable for getting data and display it and manipulate it  <p align="center"><img src="https://github.com/lilfrou/calender/blob/master/public/media/read_me/callback.png" width="800"></p> </li>
 
 </ul>
 
