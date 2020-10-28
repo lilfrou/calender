@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
+use DateTime;
+use DateTimeZone;
 
 class EventController extends Controller
 {
@@ -80,7 +82,7 @@ class EventController extends Controller
                 'end' => Carbon::parse(request('start'))->addMinutes(request('duration')),
                 'password' => request('password')
             ]);
-            broadcast(new MeetingCreatedEvent(null,request('user_id'),'detail'));
+            // broadcast(new MeetingCreatedEvent(null,request('user_id'),'detail'));
                 return 200;
         } catch (Exception $e) {
             if (401 == $e->getCode()) {
@@ -109,6 +111,54 @@ class EventController extends Controller
 
 
     }
+    public function updateDrag()
+    {
+
+        try {
+            $client = new Client(['base_uri' => 'https://zoom.us']);
+            $arr_token = json_decode($this->token->where('user_id', request('user_id'))->value('token'));
+
+            $accessToken = $arr_token->access_token;
+            $meeting_id = $this->event->where('id', request('id'))->value('meeting_id');
+            $response = $client->request('PATCH', '/v2/meetings/' . $meeting_id, [
+                "headers" => [
+                    "Authorization" => "Bearer $accessToken"
+                ],
+                'json' => [
+                    "start_time" => request('start'),
+                ],
+            ]);
+            $this->event->where('id', request('id'))->update([
+
+                'start' => request('start'),
+            ]);
+                return 200;
+        } catch (Exception $e) {
+            if (401 == $e->getCode()) {
+                $arr_refresh_token = json_decode($this->token->where('user_id', request('user_id'))->value('token'));
+                $refresh_token = $arr_refresh_token->refresh_token;
+
+                $client = new Client(['base_uri' => 'https://zoom.us']);
+
+                $response = $client->request('POST', '/oauth/token', [
+                    "headers" => [
+                        "Authorization" => "Basic " . base64_encode(env('CLIENT_ID') . ':' . env('CLIENT_SECRET'))
+                    ],
+                    'form_params' => [
+                        "grant_type" => "refresh_token",
+                        "refresh_token" => $refresh_token
+                    ],
+                ]);
+                $token = json_decode($response->getBody()->getContents(), true);
+                $this->tokenUpdateCreate($token, request('user_id'));
+
+                $this->updateDrag();
+            } else {
+                echo $e->getMessage();
+            }
+        }
+    }
+
     public function destroy()
     {
         try {
@@ -123,7 +173,7 @@ class EventController extends Controller
                 ],
             ]);
             $event = $this->event->where('id', request('event_id'))->delete();
-            broadcast(new MeetingCreatedEvent(null,request('user_id'),'delete'));
+            // broadcast(new MeetingCreatedEvent(null,request('user_id'),'delete'));
             return 200;
         } catch (Exception $e) {
             if (401 == $e->getCode()) {
@@ -245,9 +295,8 @@ class EventController extends Controller
                 "password" => request('password'),
                 "join_url" => $data->join_url
             ]);
-            broadcast(new MeetingCreatedEvent($data,request('user_id'),'create'));
-            return 200;
-            //  return ['join_url'=> $data->join_url,'password'=>request('password'),'meeting_id'=>$data->id];
+            // broadcast(new MeetingCreatedEvent($data,request('user_id'),'create'));
+             return ['meeting'=> $data];
 
         } catch (Exception $e) {
             if (401 == $e->getCode()) {

@@ -37,7 +37,6 @@
                   v-model="title"
                   required
                 />
-
               </div>
               <div class="form-group">
                 <label>description</label>
@@ -48,7 +47,6 @@
                   v-model="description"
                   required
                 />
-
               </div>
 
               <div class="form-group">
@@ -61,42 +59,49 @@
                   class="form-control"
                   required
                 />
-
               </div>
               <div class="row">
                 <div class="col-6">
                   <div class="form-group">
                     <label>hours</label>
 
-                    <select class="form-control" v-model="hours" required v-on:change="changed">
+                    <select
+                      class="form-control"
+                      v-model="hours"
+                      required
+                      v-on:change="changed"
+                    >
                       <option selected disabled value="">Select</option>
                       <option v-for="(n, hour) in 25" :key="hour" :value="hour">
                         <p v-if="hour === 0 || hour === 1">{{ hour }} hour</p>
                         <p v-else>{{ hour }} hours</p>
                       </option>
                     </select>
-
                   </div>
                 </div>
                 <div class="col-6">
                   <div class="form-group">
                     <label>minutes</label>
 
-                    <select class="form-control" v-model="minutes" required id="minutes-0">
+                    <select
+                      class="form-control"
+                      v-model="minutes"
+                      required
+                      id="minutes-0"
+                    >
                       <option selected disabled value="">Select</option>
                       <option
                         v-for="(n, minute) in 60"
                         :key="minute"
                         :value="minute"
-                        :id="'minutes_'+minute"
+                        :id="'minutes_' + minute"
                       >
-                        <p v-if="minute === 0 || minute === 1" >
+                        <p v-if="minute === 0 || minute === 1">
                           {{ minute }} minute
                         </p>
                         <p v-else>{{ minute }} minutes</p>
                       </option>
                     </select>
-
                   </div>
                 </div>
               </div>
@@ -123,7 +128,6 @@
                     </button>
                   </div>
                 </div>
-
               </div>
             </div>
             <div class="block-content block-content-full text-right border-top">
@@ -139,7 +143,6 @@
                 id="create_button"
                 type="submit"
                 class="btn btn-sm btn-outline-primary"
-
               >
                 create
               </button>
@@ -151,7 +154,6 @@
   </div>
 </template>
 <script>
-
 export default {
   data() {
     return {
@@ -164,6 +166,7 @@ export default {
       end: "",
       type: "",
       password: "",
+      meeting_detail:[]
     };
   },
   props: ["user_id", "infoSelected"],
@@ -177,21 +180,21 @@ export default {
       this.end = "";
       this.type = "";
       this.password = "";
+      this.meeting_detail=[];
     },
-    changed(){
-        if(this.hours===24){
-            this.minutes=0;
-            $( "#minutes-0" ).prop( "disabled", true );
-            $( "#minutes_0" ).prop( "disabled", false );
-
-        }else if(this.hours===0){
-             $( "#minutes-0" ).prop( "disabled", false );
-             $( "#minutes_0" ).prop( "disabled", true );
-              this.minutes=1;
-        }else{
-         $( "#minutes-0" ).prop( "disabled", false );
-         $( "#minutes_0" ).prop( "disabled", false );
-        }
+    changed() {
+      if (this.hours === 24) {
+        this.minutes = 0;
+        $("#minutes-0").prop("disabled", true);
+        $("#minutes_0").prop("disabled", false);
+      } else if (this.hours === 0) {
+        $("#minutes-0").prop("disabled", false);
+        $("#minutes_0").prop("disabled", true);
+        this.minutes = 1;
+      } else {
+        $("#minutes-0").prop("disabled", false);
+        $("#minutes_0").prop("disabled", false);
+      }
     },
     togglePassword() {
       var x = document.getElementById("password-0");
@@ -208,7 +211,7 @@ export default {
       //   } else {
       //     return;
       //   }
-       const Toast = this.$swal.mixin({
+      const Toast = this.$swal.mixin({
         toast: true,
         position: "top-end",
         showConfirmButton: false,
@@ -234,21 +237,61 @@ export default {
           description: this.description,
           password: this.password,
         })
-        .then(
-          (response) => (
-            this.$emit("evnetCreated", response), console.log(response.data)
-          )
-        )
+        .then((response) => {
+          this.$emit("evnetCreated", response),
+            this.meeting_detail=[
+              response.data.meeting.host_email +
+                " is inviting you to a scheduled Zoom meeting.",
+              "topic: " + response.data.meeting.topic + ".",
+              "Time: " + response.data.meeting.start_time + ".",
+              "Join Zoom Meeting .",
+              response.data.meeting.join_url + " .",
+              "Passcode :" + response.data.meeting.password,
+            ],
+           this.$swal({
+              title: "meeting created",
+              text: this.meeting_detail.join("\n\n"),
+              confirmButtonText: "Copy invitation",
+              icon: "success",
+              preConfirm: function () {
+                return new Promise(function (resolve) {
+                  if (true) {
+                    var el = document.getElementById("swal2-content")
+                      .textContent;
+                    resolve([
+                      navigator.clipboard.writeText(el).then(
+                        function () {
+                          console.log(
+                            "Async: Copying to clipboard was successful!"
+                          );
+                          Toast.fire({
+                            icon: "success",
+                            title: "Copied",
+                          });
+                        },
+                        function (err) {
+                          console.error("Async: Could not copy text: ", err);
+                        }
+                      ),
+                    ]);
+                  }
+                });
+                 },
+            });
+
+        })
         .catch((error) => {
           Toast.fire({
             icon: "error",
             title: "Something went wrong!",
           }),
-            console.log(error),
-             $("#span_create").remove();
-          $("#create_button").html("create").attr("disabled", false);
+            console.log(error);
         })
-        .finally(() => this.reset());
+        .finally(() => {
+          this.reset(), $("#span_create").remove(),
+          $("#create_button").html("create").attr("disabled", false),
+           $("#createEvent").modal("hide")
+        });
     },
   },
   watch: {
@@ -257,7 +300,6 @@ export default {
       //   this.end = newValue.startStr;
       this.type = newValue.view.type;
     },
-
   },
 };
 </script>

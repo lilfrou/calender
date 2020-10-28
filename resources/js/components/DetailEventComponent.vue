@@ -219,16 +219,22 @@ export default {
           user_id: this.user_id,
         })
         .then(
-          (response) => this.$emit("eventDeleted", response),
+          (response) => {this.$emit("eventDeleted", response),  Toast.fire({
+            icon: "success",
+            title: "meeting deleted!",
+          })},
         )
         .catch((error) => {
           Toast.fire({
             icon: "error",
             title: "Something went wrong!",
           }),
-            console.log(error),
-            $("#span_delete").remove();
+            console.log(error)
+
+        }).finally(() => {
+         $("#span_delete").remove();
           $("#delete_button").html("delete").attr("disabled", false);
+           $("#detailEvent").modal("hide")
         });
     },
     getEvent() {
@@ -276,15 +282,21 @@ export default {
           description: this.event.description,
           password: this.event.password,
         })
-        .then((response) => this.$emit("eventUpdate", response))
+        .then((response) => {this.$emit("eventUpdate", response), Toast.fire({
+                  icon: "success",
+                  title: "meeting updated!",
+                })})
         .catch((error) => {
           Toast.fire({
             icon: "error",
             title: "Something went wrong!",
           }),
-            console.log(error),
-             $("#span_detail").remove();
+            console.log(error)
+
+        }).finally(() => {
+         $("#span_detail").remove();
           $("#detail_button").html("update").attr("disabled", false);
+           $("#detailEvent").modal("hide")
         });
     },
   },

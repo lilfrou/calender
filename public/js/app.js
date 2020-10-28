@@ -19621,6 +19621,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -19632,7 +19635,8 @@ __webpack_require__.r(__webpack_exports__);
       start: "",
       end: "",
       type: "",
-      password: ""
+      password: "",
+      meeting_detail: []
     };
   },
   props: ["user_id", "infoSelected"],
@@ -19645,6 +19649,7 @@ __webpack_require__.r(__webpack_exports__);
       this.end = "";
       this.type = "";
       this.password = "";
+      this.meeting_detail = [];
     },
     changed: function changed() {
       if (this.hours === 24) {
@@ -19699,15 +19704,35 @@ __webpack_require__.r(__webpack_exports__);
         description: this.description,
         password: this.password
       }).then(function (response) {
-        return _this.$emit("evnetCreated", response), console.log(response.data);
+        _this.$emit("evnetCreated", response), _this.meeting_detail = [response.data.meeting.host_email + " is inviting you to a scheduled Zoom meeting.", "topic: " + response.data.meeting.topic + ".", "Time: " + response.data.meeting.start_time + ".", "Join Zoom Meeting .", response.data.meeting.join_url + " .", "Passcode :" + response.data.meeting.password], _this.$swal({
+          title: "meeting created",
+          text: _this.meeting_detail.join("\n\n"),
+          confirmButtonText: "Copy invitation",
+          icon: "success",
+          preConfirm: function preConfirm() {
+            return new Promise(function (resolve) {
+              if (true) {
+                var el = document.getElementById("swal2-content").textContent;
+                resolve([navigator.clipboard.writeText(el).then(function () {
+                  console.log("Async: Copying to clipboard was successful!");
+                  Toast.fire({
+                    icon: "success",
+                    title: "Copied"
+                  });
+                }, function (err) {
+                  console.error("Async: Could not copy text: ", err);
+                })]);
+              }
+            });
+          }
+        });
       })["catch"](function (error) {
         Toast.fire({
           icon: "error",
           title: "Something went wrong!"
-        }), console.log(error), $("#span_create").remove();
-        $("#create_button").html("create").attr("disabled", false);
+        }), console.log(error);
       })["finally"](function () {
-        return _this.reset();
+        _this.reset(), $("#span_create").remove(), $("#create_button").html("create").attr("disabled", false), $("#createEvent").modal("hide");
       });
     }
   },
@@ -19857,7 +19882,7 @@ __webpack_require__.r(__webpack_exports__);
         handleWindowResize: true,
         windowResizeDelay: 0,
         displayEventEnd: true,
-        // editable:true,
+        editable: true,
         events: {},
         select: function select(selectionInfo) {
           _this.infoSelected = selectionInfo;
@@ -19866,71 +19891,43 @@ __webpack_require__.r(__webpack_exports__);
         eventClick: function eventClick(eventClickInfo) {
           _this.EventId = eventClickInfo.event.id;
           document.getElementById("detail-button").click(); //   this.$refs.detail_event.changed();
+        },
+        eventDrop: function eventDrop(info) {
+          console.log(info.event.startStr);
+
+          var Toast = _this.$swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: function didOpen(toast) {
+              toast.addEventListener("mouseenter", _this.$swal.stopTimer);
+              toast.addEventListener("mouseleave", _this.$swal.resumeTimer);
+            }
+          });
+
+          axios.post("api/event/update/drag", {
+            id: info.oldEvent.id,
+            user_id: _this.user.id,
+            start: info.event.startStr
+          }).then(function (response) {
+            _this.getEvents(), Toast.fire({
+              icon: "success",
+              title: "Event updated!"
+            });
+          })["catch"](function (error) {
+            console.log(error), Toast.fire({
+              icon: "error",
+              title: "Something went wrong!"
+            }), info.revert();
+          });
         }
       }
     };
   },
   mounted: function mounted() {
-    var _this2 = this;
-
-    var Toast = this.$swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 2000,
-      timerProgressBar: true,
-      didOpen: function didOpen(toast) {
-        toast.addEventListener("mouseenter", _this2.$swal.stopTimer);
-        toast.addEventListener("mouseleave", _this2.$swal.resumeTimer);
-      }
-    });
-    window.Echo.channel("meeting.".concat(this.user.id)).listen(".meeting-event", function (e) {
-      if (e.type === "delete") {
-        $("#span_" + e.type).remove();
-        $("#" + e.type + "_button").html("delete").attr("disabled", false);
-        $("#detailEvent").modal("hide");
-        Toast.fire({
-          icon: "success",
-          title: "meeting deleted"
-        });
-      } else {
-        $("#span_" + e.type).remove();
-        $("#" + e.type + "_button").html(e.type === "detail" ? "update" : e.type).attr("disabled", false);
-        $("#" + e.type + "Event").modal("hide");
-
-        if (e.type === "detail") {
-          Toast.fire({
-            icon: "success",
-            title: "meeting updated"
-          });
-        } else {
-          var lines = [e.meeting.host_email + " is inviting you to a scheduled Zoom meeting.", "topic: " + e.meeting.topic + ".", "Time: " + e.meeting.start_time + ".", "Join Zoom Meeting .", e.meeting.join_url + " .", "Passcode :" + e.meeting.password];
-
-          _this2.$swal({
-            title: "meeting created",
-            text: lines.join("\n\n"),
-            confirmButtonText: "Copy invitation",
-            icon: "success",
-            preConfirm: function preConfirm() {
-              return new Promise(function (resolve) {
-                if (true) {
-                  var el = document.getElementById("swal2-content").textContent;
-                  resolve([navigator.clipboard.writeText(el).then(function () {
-                    console.log("Async: Copying to clipboard was successful!");
-                    Toast.fire({
-                      icon: "success",
-                      title: "Copied"
-                    });
-                  }, function (err) {
-                    console.error("Async: Could not copy text: ", err);
-                  })]);
-                }
-              });
-            }
-          });
-        }
-      }
-    });
+    console.log("calendar mounted");
   },
   created: function created() {
     this.getEvents();
@@ -19938,11 +19935,11 @@ __webpack_require__.r(__webpack_exports__);
   props: ["user"],
   methods: {
     getEvents: function getEvents() {
-      var _this3 = this;
+      var _this2 = this;
 
       this.EventId = 0;
       axios.get("api/event/login/".concat(this.user.id)).then(function (response) {
-        return _this3.calendarOptions.events = response.data, console.log(response.data);
+        return _this2.calendarOptions.events = response.data, console.log(response.data);
       })["catch"](function (error) {
         return console.log(error);
       });
@@ -20179,13 +20176,19 @@ __webpack_require__.r(__webpack_exports__);
         event_id: this.EventId,
         user_id: this.user_id
       }).then(function (response) {
-        return _this.$emit("eventDeleted", response);
+        _this.$emit("eventDeleted", response), Toast.fire({
+          icon: "success",
+          title: "meeting deleted!"
+        });
       })["catch"](function (error) {
         Toast.fire({
           icon: "error",
           title: "Something went wrong!"
-        }), console.log(error), $("#span_delete").remove();
+        }), console.log(error);
+      })["finally"](function () {
+        $("#span_delete").remove();
         $("#delete_button").html("delete").attr("disabled", false);
+        $("#detailEvent").modal("hide");
       });
     },
     getEvent: function getEvent() {
@@ -20233,13 +20236,19 @@ __webpack_require__.r(__webpack_exports__);
         description: this.event.description,
         password: this.event.password
       }).then(function (response) {
-        return _this3.$emit("eventUpdate", response);
+        _this3.$emit("eventUpdate", response), Toast.fire({
+          icon: "success",
+          title: "meeting updated!"
+        });
       })["catch"](function (error) {
         Toast.fire({
           icon: "error",
           title: "Something went wrong!"
-        }), console.log(error), $("#span_detail").remove();
+        }), console.log(error);
+      })["finally"](function () {
+        $("#span_detail").remove();
         $("#detail_button").html("update").attr("disabled", false);
+        $("#detailEvent").modal("hide");
       });
     }
   },

@@ -29,6 +29,8 @@ Route::group(['prefix' => 'event'], function () {
     Route::post('destroy',  [App\Http\Controllers\EventController::class, 'destroy'])->name('event.destroy');
     Route::post('update',  [App\Http\Controllers\EventController::class, 'update'])->name('event.update');
     Route::post('createmeeting',  [App\Http\Controllers\EventController::class, 'create_meeting'])->name('event.create_meeting');
+    Route::post('update/drag',  [App\Http\Controllers\EventController::class, 'updateDrag'])->name('event.update.drag');
+
 
 
 

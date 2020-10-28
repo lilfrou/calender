@@ -111,7 +111,7 @@ export default {
 
         displayEventEnd: true,
 
-        // editable:true,
+        editable: true,
         events: {},
         select: (selectionInfo) => {
           this.infoSelected = selectionInfo;
@@ -122,90 +122,46 @@ export default {
           document.getElementById("detail-button").click();
           //   this.$refs.detail_event.changed();
         },
+        eventDrop: (info) => {
+            console.log(info.event.startStr);
+          const Toast = this.$swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", this.$swal.stopTimer);
+              toast.addEventListener("mouseleave", this.$swal.resumeTimer);
+            },
+          });
+          axios
+            .post("api/event/update/drag", {
+              id: info.oldEvent.id,
+              user_id: this.user.id,
+              start: info.event.startStr,
+            })
+            .then((response) => {
+              this.getEvents(),
+                Toast.fire({
+                  icon: "success",
+                  title: "Event updated!",
+                });
+            })
+            .catch((error) => {
+              console.log(error),
+                Toast.fire({
+                  icon: "error",
+                  title: "Something went wrong!",
+                }),
+                info.revert();
+            });
+        },
       },
     };
   },
   mounted() {
-    const Toast = this.$swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 2000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener("mouseenter", this.$swal.stopTimer);
-        toast.addEventListener("mouseleave", this.$swal.resumeTimer);
-      },
-    });
-    window.Echo.channel(`meeting.${this.user.id}`).listen(
-      ".meeting-event",
-      (e) => {
-        if (e.type === "delete") {
-          $("#span_" + e.type).remove();
-          $("#" + e.type + "_button")
-            .html("delete")
-            .attr("disabled", false);
-          $("#detailEvent").modal("hide");
-          Toast.fire({
-            icon: "success",
-            title: "meeting deleted",
-          });
-        } else {
-          $("#span_" + e.type).remove();
-          $("#" + e.type + "_button")
-            .html(e.type === "detail" ? "update" : e.type)
-            .attr("disabled", false);
-          $("#" + e.type + "Event").modal("hide");
-
-          if (e.type === "detail") {
-            Toast.fire({
-              icon: "success",
-              title: "meeting updated",
-            });
-          } else {
-            const lines = [
-              e.meeting.host_email +
-                " is inviting you to a scheduled Zoom meeting.",
-              "topic: " + e.meeting.topic + ".",
-              "Time: " + e.meeting.start_time + ".",
-              "Join Zoom Meeting .",
-              e.meeting.join_url + " .",
-              "Passcode :" + e.meeting.password,
-            ];
-            this.$swal({
-              title: "meeting created",
-              text: lines.join("\n\n"),
-              confirmButtonText: "Copy invitation",
-              icon: "success",
-              preConfirm: function () {
-                return new Promise(function (resolve) {
-                  if (true) {
-                    var el = document.getElementById("swal2-content")
-                      .textContent;
-                    resolve([
-                      navigator.clipboard.writeText(el).then(
-                        function () {
-                          console.log(
-                            "Async: Copying to clipboard was successful!"
-                          );
-                          Toast.fire({
-                            icon: "success",
-                            title: "Copied",
-                          });
-                        },
-                        function (err) {
-                          console.error("Async: Could not copy text: ", err);
-                        }
-                      ),
-                    ]);
-                  }
-                });
-              },
-            });
-          }
-        }
-      }
-    );
+      console.log("calendar mounted");
   },
   created() {
     this.getEvents();
