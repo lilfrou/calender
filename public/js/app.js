@@ -19885,8 +19885,31 @@ __webpack_require__.r(__webpack_exports__);
         editable: true,
         events: {},
         select: function select(selectionInfo) {
-          _this.infoSelected = selectionInfo;
-          document.getElementById("add-button").click();
+          var today = new Date();
+          var startday = selectionInfo.start;
+
+          if (startday.getDate() < today.getDate() && startday.getMonth() <= today.getMonth() && startday.getFullYear() <= today.getFullYear()) {
+            var Toast = _this.$swal.mixin({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+              didOpen: function didOpen(toast) {
+                toast.addEventListener("mouseenter", _this.$swal.stopTimer);
+                toast.addEventListener("mouseleave", _this.$swal.resumeTimer);
+              }
+            });
+
+            console.log(selectionInfo.start.getMonth());
+            Toast.fire({
+              icon: "error",
+              title: "you can not add a meeting on a past day!"
+            });
+          } else {
+            _this.infoSelected = selectionInfo;
+            document.getElementById("add-button").click();
+          }
         },
         eventClick: function eventClick(eventClickInfo) {
           _this.EventId = eventClickInfo.event.id;
@@ -78131,9 +78154,11 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "form-group" }, [
-                        _c("label", [_vm._v("description")]),
+                        _c("label", { attrs: { for: "description-0" } }, [
+                          _vm._v("description")
+                        ]),
                         _vm._v(" "),
-                        _c("input", {
+                        _c("textarea", {
                           directives: [
                             {
                               name: "model",
@@ -78144,8 +78169,8 @@ var render = function() {
                           ],
                           staticClass: "form-control",
                           attrs: {
-                            type: "text",
-                            name: "description",
+                            id: "description-0",
+                            rows: "3",
                             required: ""
                           },
                           domProps: { value: _vm.description },
@@ -78647,9 +78672,11 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "form-group" }, [
-                        _c("label", [_vm._v("description")]),
+                        _c("label", { attrs: { for: "description-1" } }, [
+                          _vm._v("description")
+                        ]),
                         _vm._v(" "),
-                        _c("input", {
+                        _c("textarea", {
                           directives: [
                             {
                               name: "model",
@@ -78660,8 +78687,8 @@ var render = function() {
                           ],
                           staticClass: "form-control",
                           attrs: {
-                            type: "text",
-                            name: "description",
+                            id: "description-1",
+                            rows: "3",
                             required: ""
                           },
                           domProps: { value: _vm.event.description },

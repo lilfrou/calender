@@ -36,15 +36,15 @@
                   required
                 />
               </div>
-              <div class="form-group">
-                <label>description</label>
-                <input
-                  type="text"
-                  name="description"
+               <div class="form-group">
+                <label for="description-1">description</label>
+                <textarea
                   class="form-control"
+                  id="description-1"
+                  rows="3"
                   v-model="event.description"
                   required
-                />
+                ></textarea>
               </div>
               <div class="form-group">
                 <label>start</label>

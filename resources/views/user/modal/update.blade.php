@@ -20,8 +20,8 @@
                         <div class="form-group">
                             <label>{{trans('user.auth')}}</label>
                             <select name="auth" class="form-control" required>
-                                <option value="" disabled>{{trans('c.please_select')}}</option>
-                                <option value="admin" @if($user->auth == 'admin') selected @endif>admin</option>
+                                <option value=""  selected disabled>{{trans('c.please_select')}}</option>
+                                {{-- <option value="admin" @if($user->auth == 'admin') selected @endif>admin</option> --}}
                                 <option value="operator" @if($user->auth == 'operator') selected @endif>operator</option>
 
                                 <option value="guest" @if($user->auth == 'guest') selected @endif>guest</option>

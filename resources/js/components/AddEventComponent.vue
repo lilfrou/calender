@@ -39,14 +39,14 @@
                 />
               </div>
               <div class="form-group">
-                <label>description</label>
-                <input
-                  type="text"
-                  name="description"
+                <label for="description-0">description</label>
+                <textarea
                   class="form-control"
+                  id="description-0"
+                  rows="3"
                   v-model="description"
                   required
-                />
+                ></textarea>
               </div>
 
               <div class="form-group">
@@ -166,7 +166,7 @@ export default {
       end: "",
       type: "",
       password: "",
-      meeting_detail:[]
+      meeting_detail: [],
     };
   },
   props: ["user_id", "infoSelected"],
@@ -180,7 +180,7 @@ export default {
       this.end = "";
       this.type = "";
       this.password = "";
-      this.meeting_detail=[];
+      this.meeting_detail = [];
     },
     changed() {
       if (this.hours === 24) {
@@ -239,7 +239,7 @@ export default {
         })
         .then((response) => {
           this.$emit("evnetCreated", response),
-            this.meeting_detail=[
+            (this.meeting_detail = [
               response.data.meeting.host_email +
                 " is inviting you to a scheduled Zoom meeting.",
               "topic: " + response.data.meeting.topic + ".",
@@ -247,8 +247,8 @@ export default {
               "Join Zoom Meeting .",
               response.data.meeting.join_url + " .",
               "Passcode :" + response.data.meeting.password,
-            ],
-           this.$swal({
+            ]),
+            this.$swal({
               title: "meeting created",
               text: this.meeting_detail.join("\n\n"),
               confirmButtonText: "Copy invitation",
@@ -276,9 +276,8 @@ export default {
                     ]);
                   }
                 });
-                 },
+              },
             });
-
         })
         .catch((error) => {
           Toast.fire({
@@ -288,9 +287,10 @@ export default {
             console.log(error);
         })
         .finally(() => {
-          this.reset(), $("#span_create").remove(),
-          $("#create_button").html("create").attr("disabled", false),
-           $("#createEvent").modal("hide")
+          this.reset(),
+            $("#span_create").remove(),
+            $("#create_button").html("create").attr("disabled", false),
+            $("#createEvent").modal("hide");
         });
     },
   },

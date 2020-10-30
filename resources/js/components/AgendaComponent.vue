@@ -114,8 +114,31 @@ export default {
         editable: true,
         events: {},
         select: (selectionInfo) => {
-          this.infoSelected = selectionInfo;
+            var today=new Date();
+            var startday=selectionInfo.start;
+           if(startday.getDate() < today.getDate() && startday.getMonth() <= today.getMonth()&& startday.getFullYear() <= today.getFullYear()){
+               const Toast = this.$swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", this.$swal.stopTimer);
+              toast.addEventListener("mouseleave", this.$swal.resumeTimer);
+            },
+          });
+          console.log(selectionInfo.start.getMonth());
+              Toast.fire({
+                  icon: "error",
+                  title: "you can not add a meeting on a past day!",
+                });
+           }else{
+                this.infoSelected = selectionInfo;
           document.getElementById("add-button").click();
+           }
+
+
         },
         eventClick: (eventClickInfo) => {
           this.EventId = eventClickInfo.event.id;
